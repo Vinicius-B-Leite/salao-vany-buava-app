@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, Text, View } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import HairSvg from '../../assets/hair.svg';
@@ -7,35 +7,24 @@ import YeySlashSvg from '../../assets/yeyslash.svg'
 import HomeItem from '../../components/HomeItem';
 
 import * as S from './styles'
+import { child, get } from 'firebase/database';
+import { dbRef } from '../../service/firebase';
 
 
 export default function Home() {
 
-  const data = [
-    {
-      id: '1',
-      type: 'hair',
-      cliente: 'Regina',
-      hora: '9:30 am',
-      procedimento: ['Escova',  'Coloração']
-    },
+  const [data, setData] = useState([])
 
-    {
-      id: '2',
-      type: 'nail',
-      cliente: 'Regina',
-      hora: '9:30 am',
-      procedimento: ['Pé',  'Mão']
-    },
-    {
-      id: '4',
-      type: 'eyeslash',
-      cliente: 'Regina da silva pereriea',
-      hora: '9:30 am',
-      procedimento: ['Extenção de cílios']
-    },
-  
-  ]
+  useEffect(()=>{
+
+    get(child(dbRef, 'agenda')).then((snapshot) => {
+      if (snapshot.exists()){
+        let data = Object.values(snapshot.val()).map(i => i)
+        console.log(data[0].cliente)
+      }
+    })
+
+  }, [])
 
   return (
     <S.Container>
