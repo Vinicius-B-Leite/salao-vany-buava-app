@@ -1,4 +1,4 @@
-package com.salaovanybuava.newarchitecture;
+package com.viniciusbl21.SalaoVanyBuava.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -20,9 +20,9 @@ import com.facebook.react.fabric.EmptyReactNativeConfig;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.fabric.ReactNativeConfig;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.salaovanybuava.BuildConfig;
-import com.salaovanybuava.newarchitecture.components.MainComponentsRegistry;
-import com.salaovanybuava.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import com.viniciusbl21.SalaoVanyBuava.BuildConfig;
+import com.viniciusbl21.SalaoVanyBuava.newarchitecture.components.MainComponentsRegistry;
+import com.viniciusbl21.SalaoVanyBuava.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 

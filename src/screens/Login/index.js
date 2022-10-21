@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Dimensions,  TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Dimensions,  TouchableOpacity } from 'react-native';
 import LogoSvg from '../../assets/logo.svg'
 import * as S from './styles'
 import { AuthContext } from '../../contexts/auth'
@@ -10,10 +10,11 @@ const { width, height } = Dimensions.get('screen')
 
 export default function Login() {
 
-    const { isLogged, login, errorLogin } = useContext(AuthContext)
+    const { loadingLogin, login, errorLogin } = useContext(AuthContext)
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
     const [hidePassword, setHidePassword] = useState(true)
+
 
     return (
         <S.Container>
@@ -42,7 +43,7 @@ export default function Login() {
             </S.InputContainer>
 
             <S.LoginButton onPress={() => login(email, password)}>
-                <S.TextLoginButton>Entrar</S.TextLoginButton>
+                <S.TextLoginButton>{loadingLogin ? <ActivityIndicator size={20} color="#fff"/> : 'Entrar'}</S.TextLoginButton>
             </S.LoginButton>
         </S.Container>
     );
