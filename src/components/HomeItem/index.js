@@ -11,9 +11,9 @@ const { width, height } = Dimensions.get('screen')
 
 export default function HomeItem({ data }) {
     function choseSvg() {
-        if (data.type === 'hair') return <HairSvg width={width / 4.4} height={height / 10} />
-        if (data.type === 'nail') return <NailSvg width={width / 4.4} height={height / 15} />
-        if (data.type === 'eyeslash') return <Eyeslash width={width / 4.4} height={height / 10} />
+        if (data.tipo === 'cabelo') return <HairSvg width={width / 4.4} height={height / 10} />
+        if (data.tipo === 'unha') return <NailSvg width={width / 4.4} height={height / 15} />
+        if (data.tipo === 'cilios') return <Eyeslash width={width / 4.4} height={height / 10} />
     }
     return (
         <TouchableWithoutFeedback>
@@ -25,7 +25,7 @@ export default function HomeItem({ data }) {
                 </S.InfoContainer>
                 <S.ProcedureContainer>
                     {
-                        data.procedimento.map(item => <S.Procedure>{item}</S.Procedure>)
+                        data.procedimento.map(item => <S.Procedure key={item}>{item}</S.Procedure>)
                     }
                 </S.ProcedureContainer> 
             </S.Container>
