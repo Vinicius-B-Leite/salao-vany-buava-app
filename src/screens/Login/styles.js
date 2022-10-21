@@ -14,6 +14,9 @@ export const InputContainer = styled.View`
     margin-top: 8%;
     border-radius: 5px;
     position: relative;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
 `;
 export const TextInput = styled.Text`
     color: #fff;
@@ -41,3 +44,13 @@ export const TextLoginButton = styled.Text`
     color: #fff;
     font-weight: bold;
 `;
+
+export const Error = styled.Text`
+    width: 90%;
+    background-color: #fc1303;
+    color: #FFF;
+    font-size: 15px;
+    padding-left: 5%;
+    paddingVertical: 1%;
+    border-radius: 5px;
+`
