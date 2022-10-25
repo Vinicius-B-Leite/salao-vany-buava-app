@@ -11,7 +11,7 @@ import CustomDrawer from '../components/CustomDrawer';
 const Drawer = createDrawerNavigator();
 const drawerStyle = {
     headerStyle: {
-        backgroundColor: '#0C031E'
+        backgroundColor: '#0C031E',
     }, 
     headerTintColor: '#fff', 
 
@@ -24,6 +24,7 @@ const drawerStyle = {
     drawerStyle: {
         backgroundColor: '#070113'
     },
+    
 }
 
 export default function AppRoute() {

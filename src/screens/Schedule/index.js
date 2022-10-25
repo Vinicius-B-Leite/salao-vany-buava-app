@@ -8,6 +8,7 @@ import * as S from './styles'
 import HourPicker from '../../components/HourPicker';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { format } from 'date-fns';
+import ProcedingsModal from '../../components/ProcedingsModal';
 
 
 export default function Schedule() {
@@ -16,6 +17,7 @@ export default function Schedule() {
   const [date, setDate] = useState(new Date())
   const [showDatePicker, setShowDatePicker] = useState(false)
   const [showHourPicker, setShowHourPicker] = useState(false)
+  const [proceddingsModalVisible, setProccedingsModalVisible] = useState(true)
 
   const [clientName, setClientName] = useState()
   const [totalValue, setTotalValue] = useState()
@@ -30,7 +32,12 @@ export default function Schedule() {
 
         <S.Row>
           <TypePicker selectedType={selectedType} setSelectedType={setSelectedType} />
-          <S.Input placeholder='Valor' width='50%' value={totalValue} onChangeText={txt => setValue(txt)} />
+          <S.Input 
+            placeholder='Valor' 
+            width='50%' 
+            value={totalValue} 
+            onChangeText={txt => setTotalValue(txt)}
+            keyboardType="numeric" />
         </S.Row>
 
 
@@ -40,8 +47,12 @@ export default function Schedule() {
             <TouchableOpacity onPress={() => setShowDatePicker(!showDatePicker)}>
               <Entypo name="calendar" size={24} color="#fff" />
             </TouchableOpacity>
+            <S.Input 
+            placeholder="Data" 
+            width="70%" 
+            value={format(date, 'dd/MM/yyyy')} 
+            editable={false}/>
             {showDatePicker && <DatePicker date={date} setDate={setDate} setShowDatePicker={setShowDatePicker} />}
-            <S.Input placeholder="Data" width="70%" value={format(date, 'dd/MM/yyyy')} editable={false}/>
           </S.Row>
 
           <S.Row width="45%">
@@ -60,6 +71,7 @@ export default function Schedule() {
           <Entypo name="triangle-down" size={24} color="#fff" />
           <S.Underline />
         </S.Row>
+        <ProcedingsModal setProccedingsModalVisible={setProccedingsModalVisible} proceddingsModalVisible={proceddingsModalVisible}/>
 
         <S.Button>
           <S.ButtonText>Agendar</S.ButtonText>

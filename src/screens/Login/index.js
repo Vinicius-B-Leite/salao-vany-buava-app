@@ -25,7 +25,9 @@ export default function Login() {
                 <S.TextInput>Email</S.TextInput>
                 <S.Input
                     value={email}
-                    onChangeText={(text) => setEmail(text)} />
+                    onChangeText={(text) => setEmail(text)} 
+                    autoCapitalize={false}
+                    keyboardType="email-adress"/>
             </S.InputContainer>
 
             <S.InputContainer>
@@ -33,7 +35,8 @@ export default function Login() {
                 <S.Input
                     value={password}
                     onChangeText={(text) => setPassword(text)}
-                    secureTextEntry={hidePassword} />
+                    secureTextEntry={hidePassword} 
+                    autoCapitalize={false}/>
 
                 <TouchableOpacity onPress={() => setHidePassword(!hidePassword)}>
                     {
