@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, TextInput, View } from 'react-native';
 import TypePicker from '../../components/TypePicker';
 import { Entypo } from '@expo/vector-icons';
@@ -9,22 +9,41 @@ import HourPicker from '../../components/HourPicker';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { format } from 'date-fns';
 import ProcedingsModal from '../../components/ProcedingsModal';
+import { child, get, ref } from 'firebase/database';
+import { db } from '../../service/firebase';
 
 
 export default function Schedule() {
 
-  const [selectedType, setSelectedType] = useState()
-  const [date, setDate] = useState(new Date())
   const [showDatePicker, setShowDatePicker] = useState(false)
   const [showHourPicker, setShowHourPicker] = useState(false)
-  const [proceddingsModalVisible, setProccedingsModalVisible] = useState(true)
+  const [proceddingsModalVisible, setProccedingsModalVisible] = useState(false)
 
   const [clientName, setClientName] = useState()
+  const [selectedType, setSelectedType] = useState('cabelo')
   const [totalValue, setTotalValue] = useState()
+  const [date, setDate] = useState(new Date())
   const [hour, setHour] = useState(new Date())
-  const [proceedings, setProceedings] = useState()
+  const [proceedings, setProceedings] = useState({})
 
-  
+  useEffect(() => {
+
+    function convertObjectToArray(data) {
+      let newArray = data
+      Object.keys(newArray).map(item => {
+        let getProcedings = Object.values(newArray[item]).map(i => i.nome)
+        newArray[item] = getProcedings
+      })
+      return newArray
+    }
+
+    get(child(ref(db), 'procedimentos')).then(snapshot => {
+      const data = convertObjectToArray(snapshot.val())
+      setProceedings(data)
+    })
+  }, [])
+
+
   return (
     <S.Container>
       <S.Main>
@@ -32,10 +51,10 @@ export default function Schedule() {
 
         <S.Row>
           <TypePicker selectedType={selectedType} setSelectedType={setSelectedType} />
-          <S.Input 
-            placeholder='Valor' 
-            width='50%' 
-            value={totalValue} 
+          <S.Input
+            placeholder='Valor'
+            width='50%'
+            value={totalValue}
             onChangeText={txt => setTotalValue(txt)}
             keyboardType="numeric" />
         </S.Row>
@@ -47,11 +66,11 @@ export default function Schedule() {
             <TouchableOpacity onPress={() => setShowDatePicker(!showDatePicker)}>
               <Entypo name="calendar" size={24} color="#fff" />
             </TouchableOpacity>
-            <S.Input 
-            placeholder="Data" 
-            width="70%" 
-            value={format(date, 'dd/MM/yyyy')} 
-            editable={false}/>
+            <S.Input
+              placeholder="Data"
+              width="70%"
+              value={format(date, 'dd/MM/yyyy')}
+              editable={false} />
             {showDatePicker && <DatePicker date={date} setDate={setDate} setShowDatePicker={setShowDatePicker} />}
           </S.Row>
 
@@ -60,18 +79,20 @@ export default function Schedule() {
               <Feather name="clock" size={24} color="#fff" />
             </TouchableOpacity>
             {showHourPicker && <HourPicker hour={hour} setHour={setHour} setShowHourPicker={setShowHourPicker} />}
-            <S.Input width="70%" value={format(date, 'H:m')} editable={false}/>
+            <S.Input width="70%" value={format(date, 'H:m')} editable={false} />
           </S.Row>
 
         </S.Row>
 
 
-        <S.Row>
-          <S.ScheduleTitle>Procedimentos</S.ScheduleTitle>
-          <Entypo name="triangle-down" size={24} color="#fff" />
-          <S.Underline />
-        </S.Row>
-        <ProcedingsModal setProccedingsModalVisible={setProccedingsModalVisible} proceddingsModalVisible={proceddingsModalVisible}/>
+        <TouchableOpacity onPress={() => setProccedingsModalVisible(true)}>
+          <S.Row>
+            <S.ScheduleTitle>Procedimentos</S.ScheduleTitle>
+            <Entypo name="triangle-down" size={24} color="#fff" />
+            <S.Underline />
+          </S.Row>
+        </TouchableOpacity>
+        <ProcedingsModal setProccedingsModalVisible={setProccedingsModalVisible} proceddingsModalVisible={proceddingsModalVisible} data={proceedings[selectedType]} />
 
         <S.Button>
           <S.ButtonText>Agendar</S.ButtonText>

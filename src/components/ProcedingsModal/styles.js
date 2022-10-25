@@ -4,9 +4,9 @@ import styled from 'styled-components/native';
 export const Container = styled.View`
     flex: 1;
     background-color: #0C031E;
+    padding: 5%;
 `
 export const Header = styled.View`
-    padding: 5%;
     flex-direction: row;
     align-items:  center;
     justify-content: space-between;

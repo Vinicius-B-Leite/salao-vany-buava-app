@@ -4,14 +4,15 @@ import { TouchableWithoutFeedback } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import * as S from './styles'
+import Item from './Item';
 
-export default function ProcedingsModal({ setProccedingsModalVisible, proceddingsModalVisible }) {
+export default function ProcedingsModal({ setProccedingsModalVisible, proceddingsModalVisible, data }) {
 
-    const [proceddings, setProccedings] = useState([{ name: "Luzes" }])
     const [searchInput, setSearchInput] = useState()
     const searchInputRef = useRef()
 
-    function searchIconClick(){
+
+    function searchIconClick() {
         if (!searchInputRef.current.isFocused()) searchInputRef.current.focus()
     }
 
@@ -21,18 +22,38 @@ export default function ProcedingsModal({ setProccedingsModalVisible, procedding
 
 
                 <S.Container>
+
                     <S.Header>
-                        <Ionicons name="arrow-back" size={30} color="#fff" />
+
+                        <TouchableOpacity onPress={() => setProccedingsModalVisible(false)}>
+                            <Ionicons name="arrow-back" size={30} color="#fff" />
+                        </TouchableOpacity>
+
                         <S.InputContainer>
-                            <TouchableOpacity  onPress={() => searchIconClick()}>
+
+                            <TouchableOpacity onPress={() => searchIconClick()}>
                                 <Ionicons name="search" size={24} color="#fff" />
                             </TouchableOpacity>
-                            <S.Input ref={searchInputRef} value={searchInput} onChangeText={txt => setSearchInput(txt)} />
-                        </S.InputContainer>
-                    </S.Header >
-                    <FlatList data={proceddings} />
-                </S.Container>
 
+                            <S.Input 
+                                ref={searchInputRef} 
+                                value={searchInput} 
+                                onChangeText={txt => setSearchInput(txt)} />
+                        </S.InputContainer>
+
+                    </S.Header >
+                    
+                    {
+                        
+                        (data === undefined) ?
+                            <Text style={{color: '#fff'}}>Este processedimento não existe</Text> :
+                            <FlatList 
+                                style={{marginTop: '10%'}}
+                                data={data} 
+                                keyExtractor={item => item} 
+                                renderItem={({item}) => <Item data={item}/>}/>
+                    }
+                </S.Container>
 
 
             </Modal>
