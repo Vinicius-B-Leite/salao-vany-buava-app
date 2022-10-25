@@ -43,6 +43,16 @@ export default function Home() {
 
   }, [date])
 
+
+  function getWeekDayName(){
+    let days = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado']
+    return days[date.getDay()]
+  }
+
+  function getMothName(){
+    let months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
+    return months[date.getMonth()]
+  }
   return (
     <S.Container>
       <S.Welcome>Olá, Vanny!</S.Welcome>
@@ -50,7 +60,7 @@ export default function Home() {
         <TouchableOpacity onPress={() => setShowDatePicker(!showDatePicker)}>
           <AntDesign name="calendar" size={24} color="#fff" />
         </TouchableOpacity>
-        <S.Date>Segunda-feira, 10 de outubro de 2022</S.Date>
+        <S.Date>{getWeekDayName()}, {date.getDate()} de {getMothName()} de {date.getFullYear()}</S.Date>
       </S.DataContainer>
 
       {

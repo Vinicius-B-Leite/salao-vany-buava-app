@@ -10,7 +10,7 @@ export default function DatePicker({ date, setDate , setShowDatePicker}) {
     return (
         <DateTimePicker
             value={date}
-            mode={'date'}
+            mode='date'
             onChange={onChange}
         />
     );
