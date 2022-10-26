@@ -28,17 +28,20 @@ export default function Schedule() {
 
   useEffect(() => {
 
-    function convertObjectToArray(data) {
-      let newArray = data
-      Object.keys(newArray).map(item => {
-        let getProcedings = Object.values(newArray[item]).map(i => i.nome)
-        newArray[item] = getProcedings
+    function addSelectStatusEachProceedings(data) {
+      let newObj = data
+      Object.keys(newObj).forEach(item => {
+
+        Object.values(newObj[item]).forEach(i => i['selected'] = false)
+
       })
-      return newArray
+
+      console.log(newObj)
+      return newObj
     }
 
     get(child(ref(db), 'procedimentos')).then(snapshot => {
-      const data = convertObjectToArray(snapshot.val())
+      const data = addSelectStatusEachProceedings(snapshot.val())
       setProceedings(data)
     })
   }, [])

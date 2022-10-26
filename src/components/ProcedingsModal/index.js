@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FlatList, Modal, Text, TextInput, View, TouchableOpacity } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -10,10 +10,28 @@ export default function ProcedingsModal({ setProccedingsModalVisible, procedding
 
     const [searchInput, setSearchInput] = useState()
     const searchInputRef = useRef()
+    const [proceedins, setProceedings] = useState()
 
+    useEffect(() => {
+
+        function formatDataStructure() {
+            setProceedings(Object.keys(data).map(item => {
+                let newItem = {}
+                newItem[item] = data[item]
+                return newItem
+            }))
+        }
+
+        formatDataStructure()
+
+    }, [])
 
     function searchIconClick() {
         if (!searchInputRef.current.isFocused()) searchInputRef.current.focus()
+    }
+
+    function filterSearch(txt) {
+        setSearchInput(txt)
     }
 
     return (
@@ -35,24 +53,14 @@ export default function ProcedingsModal({ setProccedingsModalVisible, procedding
                                 <Ionicons name="search" size={24} color="#fff" />
                             </TouchableOpacity>
 
-                            <S.Input 
-                                ref={searchInputRef} 
-                                value={searchInput} 
-                                onChangeText={txt => setSearchInput(txt)} />
+                            <S.Input
+                                ref={searchInputRef}
+                                value={searchInput}
+                                onChangeText={txt => filterSearch(txt)} />
                         </S.InputContainer>
 
                     </S.Header >
-                    
-                    {
-                        
-                        (data === undefined) ?
-                            <Text style={{color: '#fff'}}>Este processedimento não existe</Text> :
-                            <FlatList 
-                                style={{marginTop: '10%'}}
-                                data={data} 
-                                keyExtractor={item => item} 
-                                renderItem={({item}) => <Item data={item}/>}/>
-                    }
+
                 </S.Container>
 
 
