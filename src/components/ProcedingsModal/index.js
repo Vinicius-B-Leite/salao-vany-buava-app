@@ -5,24 +5,41 @@ import { Ionicons } from '@expo/vector-icons';
 
 import * as S from './styles'
 import Item from './Item';
+import { child, get, ref } from 'firebase/database';
+import { db } from '../../service/firebase';
 
-export default function ProcedingsModal({ setProccedingsModalVisible, proceddingsModalVisible, data }) {
+export default function ProcedingsModal({ setProccedingsModalVisible, proceddingsModalVisible, type }) {
 
     const [searchInput, setSearchInput] = useState()
-    const searchInputRef = useRef()
-    const [proceedins, setProceedings] = useState()
+    const searchInputRef = useRef(null)
+    const [proceedings, setProceedings] = useState()
+    const [filterProceedings, setFilterProceedings] = useState()
 
     useEffect(() => {
 
-        function formatDataStructure() {
-            setProceedings(Object.keys(data).map(item => {
+        function addSelectedStatus(data){
+            Object.keys(data).map(item => {
+                 return data[item]['selected'] = false
+            })
+            return data
+        }
+
+        function convertoToArray(data){
+            let array = Object.keys(data).map(item => {
                 let newItem = {}
                 newItem[item] = data[item]
                 return newItem
-            }))
-        }
+            })
 
-        formatDataStructure()
+            setProceedings(array)
+        }
+        
+
+        get(child(ref(db), 'procedimentos/' + type)).then((snapshot) => {
+            let newObj = addSelectedStatus(snapshot.val())
+            convertoToArray(newObj)
+        })
+        
 
     }, [])
 
@@ -32,7 +49,12 @@ export default function ProcedingsModal({ setProccedingsModalVisible, procedding
 
     function filterSearch(txt) {
         setSearchInput(txt)
+        let proceedingsFilter = proceedings.filter(item => {
+            return item && Object.values(item)[0].nome.includes(txt.toLowerCase())
+        })
+        setFilterProceedings(proceedingsFilter)
     }
+
 
     return (
         <TouchableWithoutFeedback onPress={() => setProccedingsModalVisible(false)}>
@@ -61,6 +83,13 @@ export default function ProcedingsModal({ setProccedingsModalVisible, procedding
 
                     </S.Header >
 
+                    <FlatList
+                        style={{ marginTop: '15%' }}
+                        data={searchInput ? filterProceedings : proceedings}
+                        keyExtractor={(item) => Object.keys(item).toString()}
+                        renderItem={({ item }) => <Item data={item} />}
+                    />
+                    
                 </S.Container>
 
 

@@ -9,8 +9,6 @@ import HourPicker from '../../components/HourPicker';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { format } from 'date-fns';
 import ProcedingsModal from '../../components/ProcedingsModal';
-import { child, get, ref } from 'firebase/database';
-import { db } from '../../service/firebase';
 
 
 export default function Schedule() {
@@ -24,27 +22,6 @@ export default function Schedule() {
   const [totalValue, setTotalValue] = useState()
   const [date, setDate] = useState(new Date())
   const [hour, setHour] = useState(new Date())
-  const [proceedings, setProceedings] = useState({})
-
-  useEffect(() => {
-
-    function addSelectStatusEachProceedings(data) {
-      let newObj = data
-      Object.keys(newObj).forEach(item => {
-
-        Object.values(newObj[item]).forEach(i => i['selected'] = false)
-
-      })
-
-      console.log(newObj)
-      return newObj
-    }
-
-    get(child(ref(db), 'procedimentos')).then(snapshot => {
-      const data = addSelectStatusEachProceedings(snapshot.val())
-      setProceedings(data)
-    })
-  }, [])
 
 
   return (
@@ -95,7 +72,11 @@ export default function Schedule() {
             <S.Underline />
           </S.Row>
         </TouchableOpacity>
-        <ProcedingsModal setProccedingsModalVisible={setProccedingsModalVisible} proceddingsModalVisible={proceddingsModalVisible} data={proceedings[selectedType]} />
+        { proceddingsModalVisible &&  <ProcedingsModal
+          setProccedingsModalVisible={setProccedingsModalVisible}
+          proceddingsModalVisible={proceddingsModalVisible}
+          type={selectedType} />}
+
 
         <S.Button>
           <S.ButtonText>Agendar</S.ButtonText>
