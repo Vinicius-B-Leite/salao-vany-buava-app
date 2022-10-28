@@ -15,6 +15,12 @@ export default function ProcedingsModal({ setProccedingsModalVisible, procedding
     const [filterProceedings, setFilterProceedings] = useState()
 
     useEffect(() => {
+        let isAnythingSelected = proceedings.map(i => {
+            let key = Object.keys(i)
+            return i[key].selected
+        })
+
+        if (isAnythingSelected.includes(true)) return
 
         function addSelectedStatus(data){
             Object.keys(data).map(item => {

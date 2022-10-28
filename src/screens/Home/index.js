@@ -44,12 +44,12 @@ export default function Home() {
   }, [date])
 
 
-  function getWeekDayName(){
+  function getWeekDayName() {
     let days = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado']
     return days[date.getDay()]
   }
 
-  function getMothName(){
+  function getMothName() {
     let months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
     return months[date.getMonth()]
   }
@@ -66,11 +66,12 @@ export default function Home() {
       {
         data.length > 0 ?
           <FlatList
+            style={{ marginTop: '7%' }}
             data={data}
             keyExtractor={item => item.id}
             renderItem={({ item }) => <HomeItem data={item} />} />
-            :
-          <Text style={{color: '#fc1303', textAlign: 'center', marginTop: '10%'}}>Não teve clientes agendadas este dia</Text>
+          :
+          <Text style={{ color: '#fc1303', textAlign: 'center', marginTop: '10%' }}>Não teve clientes agendadas este dia</Text>
       }
 
 
