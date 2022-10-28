@@ -1,7 +1,7 @@
 import React from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-export default function DatePicker({ date, setDate , setShowDatePicker}) {
+export default function DatePicker({ date, setDate, setShowDatePicker }) {
     function onChange(event, selectedDate) {
         const currentDate = selectedDate;
         setShowDatePicker(false)

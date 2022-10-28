@@ -8,11 +8,10 @@ import Item from './Item';
 import { child, get, ref } from 'firebase/database';
 import { db } from '../../service/firebase';
 
-export default function ProcedingsModal({ setProccedingsModalVisible, proceddingsModalVisible, type }) {
+export default function ProcedingsModal({ setProccedingsModalVisible, proceddingsModalVisible, type, proceedings,  setProceedings}) {
 
     const [searchInput, setSearchInput] = useState()
     const searchInputRef = useRef(null)
-    const [proceedings, setProceedings] = useState()
     const [filterProceedings, setFilterProceedings] = useState()
 
     useEffect(() => {
@@ -46,7 +45,7 @@ export default function ProcedingsModal({ setProccedingsModalVisible, procedding
     function searchIconClick() {
         if (!searchInputRef.current.isFocused()) searchInputRef.current.focus()
     }
-
+    
     function filterSearch(txt) {
         setSearchInput(txt)
         let proceedingsFilter = proceedings.filter(item => {
@@ -87,7 +86,7 @@ export default function ProcedingsModal({ setProccedingsModalVisible, procedding
                         style={{ marginTop: '15%' }}
                         data={searchInput ? filterProceedings : proceedings}
                         keyExtractor={(item) => Object.keys(item).toString()}
-                        renderItem={({ item }) => <Item data={item} />}
+                        renderItem={({ item }) => <Item data={item} setProceedings={setProceedings}/>}
                     />
                     
                 </S.Container>

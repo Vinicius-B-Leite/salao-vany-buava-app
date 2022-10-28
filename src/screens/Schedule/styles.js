@@ -9,13 +9,13 @@ export const Container = styled.View`
 `;
 
 export const Main = styled.View`
-    height: ${Dimensions.get('screen').height * 0.50}px;
+    height: ${Dimensions.get('screen').height * 0.53}px;
     width: 100%;
     justify-content: space-between;
 `
 
 export const Input = styled.TextInput.attrs({
-    placeholderTextColor: '#fff'
+    placeholderTextColor: '#808080'
 })`
     color: #fff;
     border-width: 1px;
@@ -56,4 +56,13 @@ export const Button = styled.TouchableOpacity`
 export const ButtonText = styled.Text`
     color: #fff;
     font-size: 18px;
+`
+export const Error = styled.Text`
+    width: 100%;
+    background-color: #fc1303;
+    color: #FFF;
+    font-size: 15px;
+    padding-left: 5%;
+    paddingVertical: 2%;
+    border-radius: 5px;
 `
