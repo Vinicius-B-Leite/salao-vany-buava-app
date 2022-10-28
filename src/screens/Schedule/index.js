@@ -50,6 +50,7 @@ export default function Schedule() {
         data: format(date, 'dd/MM/yyyy'),
         hora: format(date, 'HH:mm'),
         tipo: selectedType,
+        valor: totalValue,
         id: newKey.toString().slice(60, newKey.length),
         procedimento: selectedObjectKeys()
       }).finally(() => {

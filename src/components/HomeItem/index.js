@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import { child, get, ref } from 'firebase/database';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, Text, View, TouchableWithoutFeedback } from 'react-native';
@@ -14,6 +15,7 @@ const { width, height } = Dimensions.get('screen')
 export default function HomeItem({ data }) {
 
     const [proceedings, setProceedings] = useState([])
+    const navigation = useNavigation()
 
     useEffect(() => {
         async function getProceedingsName(item) {
@@ -34,7 +36,7 @@ export default function HomeItem({ data }) {
         if (data.tipo === 'cilios') return <Eyeslash width={width / 4.4} height={height / 4} />
     }
     return (
-        <TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate('Editar agendamento')}>
             <S.Container>
                 {choseSvg()}
                 <S.InfoContainer>
