@@ -5,7 +5,7 @@ import HomeItem from '../../components/HomeItem';
 
 import * as S from './styles'
 
-import { child, equalTo, get, orderByChild, query, ref } from 'firebase/database';
+import { child, equalTo, get, onValue, orderByChild, query, ref } from 'firebase/database';
 import { db, dbRef } from '../../service/firebase';
 import { format } from 'date-fns'
 import DatePicker from '../../components/DatePicker';
@@ -23,8 +23,9 @@ export default function Home() {
 
   useEffect(() => {
 
-    get(dbQuery).then((snapshot) => {
+    onValue(dbQuery, (snapshot) => {
       if (snapshot.exists()) {
+        setData([])
         let data = Object.values(snapshot.val()).map(i => i)
         data.forEach(item => {
           let newData = {
@@ -35,7 +36,6 @@ export default function Home() {
             tipo: item.tipo,
             hora: item.hora
           }
-          console.log(newData.id)
           setData(oldData => [...oldData, newData])
         })
       } else setData([])

@@ -32,6 +32,7 @@ export default function Schedule() {
     if (!clientName || !selectedType || !totalValue || !date || !hour || !proceedings) setErrorMessage('Preencha todos os campos')
     else{
       let newKey = push(dbRef)
+      console.log(newKey.toString().slice(60, newKey.length))
 
       function selectedObjectKeys(){
         let selectedsProceedingsArray = proceedings.filter(item => Object.values(item)[0].selected === true)
@@ -44,8 +45,8 @@ export default function Schedule() {
         cliente: clientName,
         data: format(date, 'dd/MM/yyyy'),
         hora: format(date, 'H:m'),
-        //id
         tipo: selectedType,
+        id: newKey.toString().slice(60, newKey.length),
         procedimento: selectedObjectKeys()
       })
     }
