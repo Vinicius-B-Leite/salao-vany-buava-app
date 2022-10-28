@@ -29,9 +29,9 @@ export default function HomeItem({ data }) {
     }, [])
 
     function choseSvg() {
-        if (data.tipo === 'cabelo') return <HairSvg width={width / 4.4} height={height / 10} />
-        if (data.tipo === 'unha') return <NailSvg width={width / 4.4} height={height / 15} />
-        if (data.tipo === 'cilios') return <Eyeslash width={width / 4.4} height={height / 10} />
+        if (data.tipo === 'cabelo') return <HairSvg width={width / 4.4} height={height / 4} />
+        if (data.tipo === 'unha') return <NailSvg width={width / 4.4} height={height / 8} />
+        if (data.tipo === 'cilios') return <Eyeslash width={width / 4.4} height={height / 4} />
     }
     return (
         <TouchableWithoutFeedback>

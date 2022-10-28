@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, Platform, Text, TextInput, View } from 'react-native';
 import TypePicker from '../../components/TypePicker';
 import { Entypo } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
@@ -10,7 +10,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { format } from 'date-fns';
 import ProcedingsModal from '../../components/ProcedingsModal';
 import { push, set } from 'firebase/database';
-import {dbRef} from '../../service/firebase'
+import { dbRef } from '../../service/firebase'
 
 export default function Schedule() {
 
@@ -18,6 +18,7 @@ export default function Schedule() {
   const [showHourPicker, setShowHourPicker] = useState(false)
   const [proceddingsModalVisible, setProccedingsModalVisible] = useState(false)
   const [errorMessage, setErrorMessage] = useState()
+  const [loading, setLoading] = useState(false)
 
   const [clientName, setClientName] = useState()
   const [selectedType, setSelectedType] = useState('cabelo')
@@ -29,18 +30,21 @@ export default function Schedule() {
 
 
   function submit() {
-    if (!clientName || !selectedType || !totalValue || !date || !hour || !proceedings) setErrorMessage('Preencha todos os campos')
-    else{
+    setLoading(true)
+    if (!clientName || !selectedType || !totalValue || !date || !hour || !proceedings) {
+      setErrorMessage('Preencha todos os campos')
+      setLoading(false)
+    }
+    else {
       let newKey = push(dbRef)
-      console.log(newKey.toString().slice(60, newKey.length))
 
-      function selectedObjectKeys(){
+      function selectedObjectKeys() {
         let selectedsProceedingsArray = proceedings.filter(item => Object.values(item)[0].selected === true)
         let keys = selectedsProceedingsArray.map(item => Object.keys(item).toString())
         let selectedsProceedingsObject = Object.assign({}, keys)
         return selectedsProceedingsObject
       }
-      
+
       set(newKey, {
         cliente: clientName,
         data: format(date, 'dd/MM/yyyy'),
@@ -48,12 +52,16 @@ export default function Schedule() {
         tipo: selectedType,
         id: newKey.toString().slice(60, newKey.length),
         procedimento: selectedObjectKeys()
+      }).finally(() => {
+        setLoading(false)
+        setClientName('')
+        setTotalValue('')
       })
     }
   }
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }}  behavior={Platform.OS === 'ios' ? 'padding' : 'height'} enabled={false}>
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'} enabled={false}>
       <S.Container>
         <S.Main>
           {errorMessage && <S.Error>{errorMessage}</S.Error>}
@@ -111,7 +119,7 @@ export default function Schedule() {
 
 
           <S.Button onPress={() => submit()}>
-            <S.ButtonText>Agendar</S.ButtonText>
+            <S.ButtonText>{loading ? <ActivityIndicator color='#fff' size={24} /> : 'Agendar'}</S.ButtonText>
           </S.Button>
         </S.Main>
       </S.Container>

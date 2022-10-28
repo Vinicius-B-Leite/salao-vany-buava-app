@@ -6,10 +6,10 @@ export const Container = styled.View`
     background-color: #0C031E;
     padding: 5%;
     justify-content: center;
-`;
+    `;
 
 export const Main = styled.View`
-    height: ${Dimensions.get('screen').height * 0.53}px;
+    height: 65%;
     width: 100%;
     justify-content: space-between;
 `
