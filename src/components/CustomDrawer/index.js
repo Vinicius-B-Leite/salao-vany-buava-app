@@ -9,7 +9,7 @@ export default function CustomDrawer(props) {
     return (
         <DrawerContentScrollView {...props}>
             <View style={{marginTop: '10%', marginBottom: '10%'}}>
-                <LogoSvg width='100%' height={height / 5} />
+                <LogoSvg width='100%' height={height / 5.5} />
                 <Text style={{color: '#fff', textAlign: 'center', fontSize: 15}}>Seja bem-vinda!</Text>
             </View>
             <DrawerItemList {...props} />

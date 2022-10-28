@@ -5,7 +5,7 @@ import styled from 'styled-components/native';
 const {width, height} = Dimensions.get('screen')
 export const Container = styled.View`
     width: 100%;
-    height: ${height / 5}px;
+    height: ${height / 9}px;
     background-color: #7A4D9D;
     flex-direction: row;
     align-items: center;

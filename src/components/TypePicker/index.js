@@ -3,10 +3,10 @@ import { View } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
 
-export default function TypePicker({ selectedType, setSelectedType }) {
+export default function TypePicker({ selectedType, setSelectedType, width }) {
     return (
         <Picker
-            style={{ color: '#fff', width: '40%' }}
+            style={{ color: '#fff', width: width || '40%' }}
             dropdownIconColor={'#fff'}
             dropdownIconRippleColor={'#fff'}
             selectedValue={selectedType}

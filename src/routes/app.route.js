@@ -5,6 +5,7 @@ import Home from '../screens/Home';
 import { NavigationContainer } from '@react-navigation/native';
 import Schedule from '../screens/Schedule';
 import CustomDrawer from '../components/CustomDrawer';
+import NewProceedings from '../screens/NewProceedings';
 
 
 
@@ -38,6 +39,7 @@ export default function AppRoute() {
 
                 <Drawer.Screen name="Atendimentos de hoje" component={Home} />
                 <Drawer.Screen name="Agendar cliente" component={Schedule} />
+                <Drawer.Screen name="Cadastrar procedimento" component={NewProceedings} />
 
             </Drawer.Navigator>
         </NavigationContainer>

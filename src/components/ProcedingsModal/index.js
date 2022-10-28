@@ -13,14 +13,15 @@ export default function ProcedingsModal({ setProccedingsModalVisible, procedding
     const [searchInput, setSearchInput] = useState()
     const searchInputRef = useRef(null)
     const [filterProceedings, setFilterProceedings] = useState()
+    const [currentType, setCurrentType] = useState()
 
     useEffect(() => {
-        let isAnythingSelected = proceedings.map(i => {
+        let isAnythingSelected = proceedings?.map(i => {
             let key = Object.keys(i)
             return i[key].selected
         })
 
-        if (isAnythingSelected.includes(true)) return
+        if (isAnythingSelected?.includes(true) && currentType == type) return
 
         function addSelectedStatus(data){
             Object.keys(data).map(item => {
@@ -42,6 +43,7 @@ export default function ProcedingsModal({ setProccedingsModalVisible, procedding
 
         get(child(ref(db), 'procedimentos/' + type)).then((snapshot) => {
             let newObj = addSelectedStatus(snapshot.val())
+            setCurrentType(type)
             convertoToArray(newObj)
         })
         
