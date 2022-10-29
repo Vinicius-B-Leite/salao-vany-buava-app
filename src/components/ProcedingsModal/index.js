@@ -8,20 +8,21 @@ import Item from './Item';
 import { child, get, ref } from 'firebase/database';
 import { db } from '../../service/firebase';
 
-export default function ProcedingsModal({ setProccedingsModalVisible, proceddingsModalVisible, type, proceedings,  setProceedings}) {
+export default function ProcedingsModal({ setProccedingsModalVisible, proceddingsModalVisible, type, proceedings,  setProceedings, cType}) {
 
     const [searchInput, setSearchInput] = useState()
     const searchInputRef = useRef(null)
     const [filterProceedings, setFilterProceedings] = useState()
-    const [currentType, setCurrentType] = useState()
+    const [currentType, setCurrentType] = useState(cType || undefined)
+
 
     useEffect(() => {
-        let isAnythingSelected = proceedings?.map(i => {
-            let key = Object.keys(i)
-            return i[key].selected
-        })
-
-        if (isAnythingSelected?.includes(true) && currentType == type) return
+        // let isAnythingSelected = proceedings?.map(i => {
+        //     let key = Object.keys(i)
+        //     console.log(i[key].selected)
+        //     return i[key].selected
+        // })
+        // if (isAnythingSelected.includes(true) && currentType == type) return
 
         function addSelectedStatus(data){
             Object.keys(data).map(item => {
@@ -41,7 +42,7 @@ export default function ProcedingsModal({ setProccedingsModalVisible, procedding
         }
         
 
-        get(child(ref(db), 'procedimentos/' + type)).then((snapshot) => {
+        !proceedings &&  get(child(ref(db), 'procedimentos/' + type)).then((snapshot) => {
             let newObj = addSelectedStatus(snapshot.val())
             setCurrentType(type)
             convertoToArray(newObj)

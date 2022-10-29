@@ -9,14 +9,14 @@ export default function Item({ data: proceeding, setProceedings }) {
 
     function updateSelectedStatus(oldProceedings){
         let index = oldProceedings.indexOf(proceeding)
-        let newArray = [...oldProceedings]
+        let newArray =  [...oldProceedings]
         newArray[index][key].selected = !newArray[index][key].selected
         return newArray
     }
     return (
         <S.Container onPress={() => setProceedings(updateSelectedStatus)}>
-            <S.Proceeding>{proceeding[key].nome}</S.Proceeding>
-            <AntDesign name="checkcircle" size={24} color={proceeding[key].selected ? "#fff" : "#000"} />
+            <S.Proceeding>{proceeding[key]?.nome}</S.Proceeding>
+            <AntDesign name="checkcircle" size={24} color={proceeding[key]?.selected ? "#fff" : "#000"} />
         </S.Container>
     );
 }

@@ -34,8 +34,9 @@ export default function Schedule() {
     if (!clientName || !selectedType || !totalValue || !date || !hour || !proceedings) {
       setErrorMessage('Preencha todos os campos')
       setLoading(false)
+      return
     }
-    else {
+    
       let newKey = push(dbRef)
 
       function selectedObjectKeys() {
@@ -57,8 +58,9 @@ export default function Schedule() {
         setLoading(false)
         setClientName('')
         setTotalValue('')
+        alert(totalValue)
       })
-    }
+    
   }
 
   return (

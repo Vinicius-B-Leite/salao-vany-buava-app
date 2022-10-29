@@ -7,7 +7,7 @@ import Schedule from '../screens/Schedule';
 import CustomDrawer from '../components/CustomDrawer';
 import NewProceedings from '../screens/NewProceedings';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import UpdateProcedings from '../components/UpdateProcedings';
+import UpdateProcedings from '../screens/UpdateProcedings';
 
 
 
@@ -34,9 +34,9 @@ function HomeStack(){
     const Stack = createNativeStackNavigator()
 
     return(
-        <Stack.Navigator screenOptions={{headerShown: false}}>
-            <Stack.Screen name='Home' component={Home} />
-            <Stack.Screen name='Editar agendamento' component={UpdateProcedings} />
+        <Stack.Navigator >
+            <Stack.Screen name='Home' component={Home} options={{headerShown: false}}/>
+            <Stack.Screen name='Editar agendamento' component={UpdateProcedings} options={{headerStyle:{backgroundColor: '#0C031E'}, headerTintColor: '#fff'}}/>
         </Stack.Navigator>
     )
 }
@@ -50,7 +50,7 @@ export default function AppRoute() {
             screenOptions={drawerStyle} 
             >
 
-                <Drawer.Screen name="Atendimentos de hoje" component={HomeStack} />
+                <Drawer.Screen name="Atendimentos de hoje" component={HomeStack} options={{headerShown: false}}/>
                 <Drawer.Screen name="Agendar cliente" component={Schedule} />
                 <Drawer.Screen name="Cadastrar procedimento" component={NewProceedings} />
 

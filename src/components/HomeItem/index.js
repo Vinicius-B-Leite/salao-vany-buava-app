@@ -36,7 +36,7 @@ export default function HomeItem({ data }) {
         if (data.tipo === 'cilios') return <Eyeslash width={width / 4.4} height={height / 4} />
     }
     return (
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('Editar agendamento')}>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate('Editar agendamento', {data})}>
             <S.Container>
                 {choseSvg()}
                 <S.InfoContainer>

@@ -8,9 +8,6 @@ export default function Routes() {
 
     const { isLogged } = useContext(AuthContext)
 
-    return (
-        <SafeAreaView style={{flex: 1}}>
-            {isLogged ? <AppRoute/> : <LoginRoute/>}
-        </SafeAreaView>
+    return (isLogged ? <AppRoute/> : <LoginRoute/>
     )
 }

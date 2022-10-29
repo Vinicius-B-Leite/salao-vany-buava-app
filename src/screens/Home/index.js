@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FlatList, Text, View } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import HomeItem from '../../components/HomeItem';
-
+import { Entypo } from '@expo/vector-icons';
 import * as S from './styles'
 
 import { child, equalTo, get, onValue, orderByChild, query, ref } from 'firebase/database';
@@ -34,7 +34,8 @@ export default function Home() {
             id: String(item.id),
             procedimento: Object.values(item.procedimento),
             tipo: item.tipo,
-            hora: item.hora
+            hora: item.hora,
+            valor: item.valor
           }
           setData(oldData => [...oldData, newData])
         })
@@ -54,28 +55,34 @@ export default function Home() {
     return months[date.getMonth()]
   }
   return (
-    <S.Container>
-      <S.Welcome>Olá, Vanny!</S.Welcome>
-      <S.DataContainer>
-        <TouchableOpacity onPress={() => setShowDatePicker(!showDatePicker)}>
-          <AntDesign name="calendar" size={24} color="#fff" />
-        </TouchableOpacity>
-        <S.Date>{getWeekDayName()}, {date.getDate()} de {getMothName()} de {date.getFullYear()}</S.Date>
-      </S.DataContainer>
+    <>
+      <S.Header>
+        <Entypo name="menu" size={28} color="#fff" />
+        <S.Title>Atendimentos de hoje</S.Title>
+      </S.Header>
+      <S.Container>
+        <S.Welcome>Olá, Vanny!</S.Welcome>
+        <S.DataContainer>
+          <TouchableOpacity onPress={() => setShowDatePicker(!showDatePicker)}>
+            <AntDesign name="calendar" size={24} color="#fff" />
+          </TouchableOpacity>
+          <S.Date>{getWeekDayName()}, {date.getDate()} de {getMothName()} de {date.getFullYear()}</S.Date>
+        </S.DataContainer>
 
-      {
-        data.length > 0 ?
-          <FlatList
-            style={{ marginTop: '7%' }}
-            data={data}
-            keyExtractor={item => item.id}
-            renderItem={({ item }) => <HomeItem data={item} />} />
-          :
-          <Text style={{ color: '#fc1303', textAlign: 'center', marginTop: '10%' }}>Não teve clientes agendadas este dia</Text>
-      }
+        {
+          data.length > 0 ?
+            <FlatList
+              style={{ marginTop: '7%' }}
+              data={data}
+              keyExtractor={item => item.id}
+              renderItem={({ item }) => <HomeItem data={item} />} />
+            :
+            <Text style={{ color: '#fc1303', textAlign: 'center', marginTop: '10%' }}>Não teve clientes agendadas este dia</Text>
+        }
 
 
-      {showDatePicker && <DatePicker date={date} setDate={setDate} setShowDatePicker={setShowDatePicker} />}
-    </S.Container>
+        {showDatePicker && <DatePicker date={date} setDate={setDate} setShowDatePicker={setShowDatePicker} />}
+      </S.Container>
+    </>
   );
 }
