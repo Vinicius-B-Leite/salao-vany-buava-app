@@ -1,55 +1,40 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { FlatList, Modal, Text, TextInput, View, TouchableOpacity } from 'react-native';
-import { TouchableWithoutFeedback } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 
+import { FlatList, Modal, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import * as S from './styles'
 import Item from './Item';
+
+import { Ionicons } from '@expo/vector-icons';
+
 import { child, get, ref } from 'firebase/database';
 import { db } from '../../service/firebase';
 
-export default function ProcedingsModal({ setProccedingsModalVisible, proceddingsModalVisible, type, proceedings,  setProceedings, cType}) {
+export default function ProcedingsModal({ setProccedingsModalVisible, proceddingsModalVisible, type, proceedings,  setProceedings}) {
 
     const [searchInput, setSearchInput] = useState()
     const searchInputRef = useRef(null)
     const [filterProceedings, setFilterProceedings] = useState()
-    const [currentType, setCurrentType] = useState(cType || undefined)
 
 
     useEffect(() => {
-        // let isAnythingSelected = proceedings?.map(i => {
-        //     let key = Object.keys(i)
-        //     console.log(i[key].selected)
-        //     return i[key].selected
-        // })
-        // if (isAnythingSelected.includes(true) && currentType == type) return
 
-        function addSelectedStatus(data){
-            Object.keys(data).map(item => {
-                 return data[item]['selected'] = false
+        proceedings?.length < 1 && get(child(ref(db), 'procedimentos/' + type)).then((snapshot) => {
+            let data = snapshot.val()
+            
+            let keys = Object.keys(data)
+
+            keys.forEach(k => {
+                let proceedginsDB = {}
+                proceedginsDB['id'] = k
+                proceedginsDB['name'] = data[k].nome
+                proceedginsDB['selected'] = false
+
+                setProceedings(oldProceedings => [...oldProceedings, proceedginsDB])
             })
-            return data
-        }
-
-        function convertoToArray(data){
-            let array = Object.keys(data).map(item => {
-                let newItem = {}
-                newItem[item] = data[item]
-                return newItem
-            })
-
-            setProceedings(array)
-        }
-        
-
-        !proceedings &&  get(child(ref(db), 'procedimentos/' + type)).then((snapshot) => {
-            let newObj = addSelectedStatus(snapshot.val())
-            setCurrentType(type)
-            convertoToArray(newObj)
         })
         
 
-    }, [])
+    }, [type])
 
     function searchIconClick() {
         if (!searchInputRef.current.isFocused()) searchInputRef.current.focus()
@@ -94,7 +79,7 @@ export default function ProcedingsModal({ setProccedingsModalVisible, procedding
                     <FlatList
                         style={{ marginTop: '15%' }}
                         data={searchInput ? filterProceedings : proceedings}
-                        keyExtractor={(item) => Object.keys(item).toString()}
+                        keyExtractor={(item) => item.id.toString()}
                         renderItem={({ item }) => <Item data={item} setProceedings={setProceedings}/>}
                     />
                     

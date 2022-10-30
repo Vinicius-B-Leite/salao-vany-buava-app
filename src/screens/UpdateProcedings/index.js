@@ -1,17 +1,26 @@
-import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { KeyboardAvoidingView, TouchableOpacity, View } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+
+
+import { KeyboardAvoidingView, TouchableOpacity } from 'react-native';
+import * as S from '../Schedule/styles'
+
 import DatePicker from '../../components/DatePicker';
 import HourPicker from '../../components/HourPicker';
 import TypePicker from '../../components/TypePicker';
+import ProcedingsModal from '../../components/ProcedingsModal';
+
 import { Feather } from '@expo/vector-icons'
 import { Entypo } from '@expo/vector-icons'
 
-import * as S from '../Schedule/styles'
-import { format } from 'date-fns';
-import ProcedingsModal from '../../components/ProcedingsModal';
-import { child, get, ref, update } from 'firebase/database';
+import { child, get, ref } from 'firebase/database';
 import { db } from '../../service/firebase';
+
+import { format } from 'date-fns';
+
+
+
+
 
 export default function UpdateProcedings() {
     const navigation = useNavigation()
@@ -37,17 +46,18 @@ export default function UpdateProcedings() {
 
 
         get(child(ref(db), `procedimentos/${selectedType}`)).then(snapshot => {
-            let data = [snapshot.val()]
+            setProceedings([])
+            let data = snapshot.val()
+            let keys = Object.keys(data)
 
-            data.forEach(item => {
-                let key = Object.keys(item)
-                key.forEach(k => {
-                    item[k]['selected'] = proceedingsKeys.includes(k) ? true : false
-                    let d = {}
-                    d[k] = item[k]
+            keys.forEach(k => {
+                let proceedginsDB = {}
+                proceedginsDB['id'] = k
+                proceedginsDB['name'] = data[k].nome
+                proceedginsDB['selected'] = proceedingsKeys.includes(k) ? true : false
 
-                    setProceedings(oldP => [...oldP, d])
-                })
+                setProceedings(oldProceedings => [...oldProceedings, proceedginsDB])
+                
             })
 
         })
@@ -55,22 +65,18 @@ export default function UpdateProcedings() {
 
     function updateShedule() {
 
-        function selectedObjectKeys() {
-            let selectedsProceedingsArray = proceedings.filter(item => Object.values(item)[0].selected === true)
-            let keys = selectedsProceedingsArray.map(item => Object.keys(item).toString())
-            let selectedsProceedingsObject = Object.assign({}, keys)
-            return selectedsProceedingsObject
-        }
+        console.log(proceedings)
+        
 
-        update(ref(db, `agenda/${params.id}`), {
-            cliente: clientName,
-            data: format(date, 'dd/MM/yyyy'),
-            hora: format(hour, 'HH:mm'),
-            id: params.id,
-            procedimento: selectedObjectKeys(),
-            tipo: selectedType,
-            valor: totalValue
-        })
+        // update(ref(db, `agenda/${params.id}`), {
+        //     cliente: clientName,
+        //     data: format(date, 'dd/MM/yyyy'),
+        //     hora: format(hour, 'HH:mm'),
+        //     id: params.id,
+        //     procedimento: selectedObjectKeys(),
+        //     tipo: selectedType,
+        //     valor: totalValue
+        // })
     }
     return (
         <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'} enabled={false}>

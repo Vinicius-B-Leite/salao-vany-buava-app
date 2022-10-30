@@ -1,7 +1,8 @@
 import React, { useContext, useState } from 'react';
+
 import { ActivityIndicator, Dimensions,  TouchableOpacity } from 'react-native';
-import LogoSvg from '../../assets/logo.svg'
 import * as S from './styles'
+import LogoSvg from '../../assets/logo.svg'
 import { AuthContext } from '../../contexts/auth'
 import { Entypo } from '@expo/vector-icons';
 

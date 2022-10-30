@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
-import { ActivityIndicator, SafeAreaView, Text, TextInput, ToastAndroid, TouchableOpacity, View } from 'react-native';
-import TypePicker from '../../components/TypePicker'
+
+import { ActivityIndicator} from 'react-native';
 import * as S from './styles'
+
+import { Error } from '../Schedule/styles'
+import TypePicker from '../../components/TypePicker'
+
 import { push, ref, set } from 'firebase/database'
 import { db } from '../../service/firebase'
-import { Error } from '../Schedule/styles'
+
+
+
+
 
 export default function NewProceedings() {
 

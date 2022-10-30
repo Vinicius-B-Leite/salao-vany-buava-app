@@ -1,16 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, KeyboardAvoidingView, Platform, Text, TextInput, View } from 'react-native';
+
+import { ActivityIndicator, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
+import * as S from './styles'
+
+import DatePicker from '../../components/DatePicker'
+import HourPicker from '../../components/HourPicker';
 import TypePicker from '../../components/TypePicker';
+import ProcedingsModal from '../../components/ProcedingsModal';
+
 import { Entypo } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
-import DatePicker from '../../components/DatePicker'
-import * as S from './styles'
-import HourPicker from '../../components/HourPicker';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+
+import { db, dbRef } from '../../service/firebase'
+import { child, get, push, ref, set } from 'firebase/database';
+
 import { format } from 'date-fns';
-import ProcedingsModal from '../../components/ProcedingsModal';
-import { push, set } from 'firebase/database';
-import { dbRef } from '../../service/firebase'
+
+
+
+
+
 
 export default function Schedule() {
 
@@ -25,9 +34,29 @@ export default function Schedule() {
   const [totalValue, setTotalValue] = useState()
   const [date, setDate] = useState(new Date())
   const [hour, setHour] = useState(new Date())
-  const [proceedings, setProceedings] = useState()
+  const [proceedings, setProceedings] = useState([])
 
 
+  useEffect(() => {
+
+
+    get(child(ref(db), `procedimentos/${selectedType}`)).then(snapshot => {
+      setProceedings([])
+      let data = snapshot.val()
+      let keys = Object.keys(data)
+
+      keys.forEach(k => {
+        let proceedginsDB = {}
+        proceedginsDB['id'] = k
+        proceedginsDB['name'] = data[k].nome
+        proceedginsDB['selected'] = false
+
+        setProceedings(oldProceedings => [...oldProceedings, proceedginsDB])
+
+      })
+
+    })
+  }, [selectedType])
 
   function submit() {
     setLoading(true)
@@ -36,31 +65,25 @@ export default function Schedule() {
       setLoading(false)
       return
     }
-    
-      let newKey = push(dbRef)
 
-      function selectedObjectKeys() {
-        let selectedsProceedingsArray = proceedings.filter(item => Object.values(item)[0].selected === true)
-        let keys = selectedsProceedingsArray.map(item => Object.keys(item).toString())
-        let selectedsProceedingsObject = Object.assign({}, keys)
-        return selectedsProceedingsObject
-      }
+    let newKey = push(dbRef)
 
-      set(newKey, {
-        cliente: clientName,
-        data: format(date, 'dd/MM/yyyy'),
-        hora: format(date, 'HH:mm'),
-        tipo: selectedType,
-        valor: totalValue,
-        id: newKey.toString().slice(60, newKey.length),
-        procedimento: selectedObjectKeys()
-      }).finally(() => {
-        setLoading(false)
-        setClientName('')
-        setTotalValue('')
-        alert(totalValue)
-      })
-    
+    let keysSelected = proceedings.filter(item => item.selected == true).map(item => (item.id))
+
+    set(newKey, {
+      cliente: clientName,
+      data: format(date, 'dd/MM/yyyy'),
+      hora: format(date, 'HH:mm'),
+      tipo: selectedType,
+      valor: totalValue,
+      id: newKey.toString().slice(60, newKey.length),
+      procedimento: keysSelected
+    }).finally(() => {
+      setLoading(false)
+      setClientName('')
+      setTotalValue('')
+    })
+
   }
 
   return (
@@ -100,7 +123,7 @@ export default function Schedule() {
                 <Feather name="clock" size={24} color="#fff" />
               </TouchableOpacity>
               {showHourPicker && <HourPicker hour={hour} setHour={setHour} setShowHourPicker={setShowHourPicker} />}
-              <S.Input width="70%" value={format(date, 'H:m')} editable={false} />
+              <S.Input width="70%" value={format(hour, 'HH:mm')} editable={false} />
             </S.Row>
 
           </S.Row>
@@ -113,12 +136,12 @@ export default function Schedule() {
               <S.Underline />
             </S.Row>
           </TouchableOpacity>
-          {proceddingsModalVisible && <ProcedingsModal
+          <ProcedingsModal
             setProccedingsModalVisible={setProccedingsModalVisible}
             proceddingsModalVisible={proceddingsModalVisible}
             type={selectedType}
             proceedings={proceedings}
-            setProceedings={setProceedings} />}
+            setProceedings={setProceedings} />
 
 
           <S.Button onPress={() => submit()}>

@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, Text, View } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
-import HomeItem from '../../components/HomeItem';
-import { Entypo } from '@expo/vector-icons';
+
+import { FlatList, Text, TouchableOpacity } from 'react-native';
 import * as S from './styles'
 
-import { child, equalTo, get, onValue, orderByChild, query, ref } from 'firebase/database';
-import { db, dbRef } from '../../service/firebase';
-import { format } from 'date-fns'
+import HomeItem from '../../components/HomeItem';
 import DatePicker from '../../components/DatePicker';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+
+import { AntDesign } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
+
+import { equalTo, onValue, orderByChild, query } from 'firebase/database';
+import { dbRef } from '../../service/firebase';
+
+import { format } from 'date-fns'
 
 
 export default function Home() {
@@ -26,13 +29,14 @@ export default function Home() {
     onValue(dbQuery, (snapshot) => {
       if (snapshot.exists()) {
         setData([])
-        let data = Object.values(snapshot.val()).map(i => i)
+        let d = snapshot.val()
+        let data = Object.values(d).map(i => i)
         data.forEach(item => {
           let newData = {
             cliente: item.cliente,
             data: item.data,
             id: String(item.id),
-            procedimento: Object.values(item.procedimento),
+            procedimento: item.procedimento,
             tipo: item.tipo,
             hora: item.hora,
             valor: item.valor
