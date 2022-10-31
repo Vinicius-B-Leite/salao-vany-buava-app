@@ -29,7 +29,7 @@ export default function NewProceedings() {
         }
         const refProcedimento = ref(db, 'procedimentos/' + selectedType)
         const newKey = push(refProcedimento)
-        set(newKey, {nome: proceedingsName}).finally(() => {
+        set(newKey, {nome: proceedingsName.toLowerCase()}).finally(() => {
             setErrorMessage('')
             setProceedingsName('')
             setLoading(false)

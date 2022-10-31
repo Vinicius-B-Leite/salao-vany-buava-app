@@ -9,16 +9,17 @@ import { Ionicons } from '@expo/vector-icons';
 import { child, get, ref } from 'firebase/database';
 import { db } from '../../service/firebase';
 
-export default function ProcedingsModal({ setProccedingsModalVisible, proceddingsModalVisible, type, proceedings,  setProceedings}) {
+export default function ProcedingsModal({ setProccedingsModalVisible, proceddingsModalVisible, type, selectedProceedings, setSelectedProceedings}) {
 
     const [searchInput, setSearchInput] = useState()
     const searchInputRef = useRef(null)
     const [filterProceedings, setFilterProceedings] = useState()
+    const [proceedings, setProceedings] = useState([])
 
 
     useEffect(() => {
 
-        proceedings?.length < 1 && get(child(ref(db), 'procedimentos/' + type)).then((snapshot) => {
+        get(child(ref(db), 'procedimentos/' + type)).then((snapshot) => {
             let data = snapshot.val()
             
             let keys = Object.keys(data)
@@ -32,6 +33,7 @@ export default function ProcedingsModal({ setProccedingsModalVisible, procedding
                 setProceedings(oldProceedings => [...oldProceedings, proceedginsDB])
             })
         })
+
         
 
     }, [type])
@@ -42,8 +44,9 @@ export default function ProcedingsModal({ setProccedingsModalVisible, procedding
     
     function filterSearch(txt) {
         setSearchInput(txt)
-        let proceedingsFilter = proceedings.filter(item => {
-            return item && Object.values(item)[0].nome.includes(txt.toLowerCase())
+        let oldPo = [...proceedings]
+        let proceedingsFilter = oldPo.filter(item => {
+            return item.name.includes(txt.toLowerCase()) === true
         })
         setFilterProceedings(proceedingsFilter)
     }
@@ -80,8 +83,8 @@ export default function ProcedingsModal({ setProccedingsModalVisible, procedding
                         style={{ marginTop: '15%' }}
                         data={searchInput ? filterProceedings : proceedings}
                         keyExtractor={(item) => item.id.toString()}
-                        renderItem={({ item }) => <Item data={item} setProceedings={setProceedings}/>}
-                    />
+                        renderItem={({ item }) => <Item data={item} setSelectedProceedings={setSelectedProceedings} selectedProceedings={selectedProceedings}/>}
+                    /> 
                     
                 </S.Container>
 

@@ -15,42 +15,44 @@ const Drawer = createDrawerNavigator();
 const drawerStyle = {
     headerStyle: {
         backgroundColor: '#0C031E',
-    }, 
-    headerTintColor: '#fff', 
+    },
+    headerTintColor: '#fff',
 
-    drawerActiveBackgroundColor: '#A036F3', 
-    drawerActiveTintColor: '#fff', 
+    drawerActiveBackgroundColor: '#A036F3',
+    drawerActiveTintColor: '#fff',
 
-    drawerInactiveBackgroundColor: '#410C6B', 
+    drawerInactiveBackgroundColor: '#410C6B',
     drawerInactiveTintColor: '#615B5B',
 
     drawerStyle: {
         backgroundColor: '#070113'
     },
-    
+
 }
 
-function HomeStack(){
+function HomeStack() {
     const Stack = createNativeStackNavigator()
 
-    return(
-        <Stack.Navigator >
-            <Stack.Screen name='Home' component={Home} options={{headerShown: false}}/>
-            <Stack.Screen name='Editar agendamento' component={UpdateProcedings} options={{headerStyle:{backgroundColor: '#0C031E'}, headerTintColor: '#fff'}}/>
-        </Stack.Navigator>
+    return (
+        <View style={{flex: 1}}>
+            <Stack.Navigator >
+                <Stack.Screen name='Home' component={Home} options={{ headerShown: false }} />
+                <Stack.Screen name='Editar agendamento' component={UpdateProcedings} options={{ headerStyle: { backgroundColor: '#0C031E' }, headerTintColor: '#fff' }} />
+            </Stack.Navigator>
+        </View>
     )
 }
 
 export default function AppRoute() {
-    
+
     return (
         <NavigationContainer>
-            <Drawer.Navigator 
-            drawerContent={(props) => <CustomDrawer {...props} />}
-            screenOptions={drawerStyle} 
+            <Drawer.Navigator
+                drawerContent={(props) => <CustomDrawer {...props} />}
+                screenOptions={drawerStyle}
             >
 
-                <Drawer.Screen name="Atendimentos de hoje" component={HomeStack} options={{headerShown: false}}/>
+                <Drawer.Screen name="Atendimentos de hoje" component={HomeStack} options={{ headerShown: false }} />
                 <Drawer.Screen name="Agendar cliente" component={Schedule} />
                 <Drawer.Screen name="Cadastrar procedimento" component={NewProceedings} />
 

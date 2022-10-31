@@ -34,29 +34,9 @@ export default function Schedule() {
   const [totalValue, setTotalValue] = useState()
   const [date, setDate] = useState(new Date())
   const [hour, setHour] = useState(new Date())
-  const [proceedings, setProceedings] = useState([])
+  const [selectedProceedings, setSelectedProceedings] = useState([])
 
 
-  useEffect(() => {
-
-
-    get(child(ref(db), `procedimentos/${selectedType}`)).then(snapshot => {
-      setProceedings([])
-      let data = snapshot.val()
-      let keys = Object.keys(data)
-
-      keys.forEach(k => {
-        let proceedginsDB = {}
-        proceedginsDB['id'] = k
-        proceedginsDB['name'] = data[k].nome
-        proceedginsDB['selected'] = false
-
-        setProceedings(oldProceedings => [...oldProceedings, proceedginsDB])
-
-      })
-
-    })
-  }, [selectedType])
 
   function submit() {
     setLoading(true)
@@ -85,6 +65,7 @@ export default function Schedule() {
     })
 
   }
+  console.log(selectedProceedings)
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'} enabled={false}>
@@ -140,8 +121,8 @@ export default function Schedule() {
             setProccedingsModalVisible={setProccedingsModalVisible}
             proceddingsModalVisible={proceddingsModalVisible}
             type={selectedType}
-            proceedings={proceedings}
-            setProceedings={setProceedings} />
+            selectedProceedings={selectedProceedings}
+            setSelectedProceedings={setSelectedProceedings} />
 
 
           <S.Button onPress={() => submit()}>
