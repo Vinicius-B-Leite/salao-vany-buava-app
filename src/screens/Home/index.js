@@ -13,9 +13,12 @@ import { equalTo, onValue, orderByChild, query } from 'firebase/database';
 import { dbRef } from '../../service/firebase';
 
 import { format } from 'date-fns'
+import { useNavigation } from '@react-navigation/native';
 
 
 export default function Home() {
+
+  const navigation = useNavigation()
 
   const [data, setData] = useState([])
   const [date, setDate] = useState(new Date())
@@ -61,7 +64,9 @@ export default function Home() {
   return (
     <>
       <S.Header>
-        <Entypo name="menu" size={28} color="#fff" />
+        <TouchableOpacity onPress={() => navigation.openDrawer()}>
+          <Entypo name="menu" size={28} color="#fff" />
+        </TouchableOpacity>
         <S.Title>Atendimentos de hoje</S.Title>
       </S.Header>
       <S.Container>

@@ -40,7 +40,7 @@ export default function Schedule() {
 
   function submit() {
     setLoading(true)
-    if (!clientName || !selectedType || !totalValue || !date || !hour || !proceedings) {
+    if (!clientName || !selectedType || !totalValue || !date || !hour || !selectedProceedings) {
       setErrorMessage('Preencha todos os campos')
       setLoading(false)
       return
@@ -48,7 +48,7 @@ export default function Schedule() {
 
     let newKey = push(dbRef)
 
-    let keysSelected = proceedings.filter(item => item.selected == true).map(item => (item.id))
+    let keysSelected = selectedProceedings.map(item => (item.id))
 
     set(newKey, {
       cliente: clientName,
@@ -65,7 +65,6 @@ export default function Schedule() {
     })
 
   }
-  console.log(selectedProceedings)
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'} enabled={false}>

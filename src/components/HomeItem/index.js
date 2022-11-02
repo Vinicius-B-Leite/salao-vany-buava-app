@@ -24,6 +24,7 @@ export default function HomeItem({ data }) {
 
         function getProceedingsName() {
             let p = data.procedimento
+            setProceedings([])
             p.forEach(item => {
                 get(child(ref(db), `procedimentos/${data.tipo}/${item}`)).then(snapshot => {
                     if (snapshot.exists()) {
@@ -34,7 +35,7 @@ export default function HomeItem({ data }) {
             })
         }
         getProceedingsName()
-    }, [])
+    }, [data])
 
     function choseSvg() {
         if (data.tipo === 'cabelo') return <HairSvg width={width / 4.4} height={height / 4} />

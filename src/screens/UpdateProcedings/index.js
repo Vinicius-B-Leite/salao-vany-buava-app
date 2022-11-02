@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 
-import { KeyboardAvoidingView, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
 import * as S from '../Schedule/styles'
 
 import DatePicker from '../../components/DatePicker';
@@ -13,7 +13,7 @@ import ProcedingsModal from '../../components/ProcedingsModal';
 import { Feather } from '@expo/vector-icons'
 import { Entypo } from '@expo/vector-icons'
 
-import { child, get, ref } from 'firebase/database';
+import { ref, update } from 'firebase/database';
 import { db } from '../../service/firebase';
 
 import { format } from 'date-fns';
@@ -23,8 +23,8 @@ import { format } from 'date-fns';
 
 
 export default function UpdateProcedings() {
-    const navigation = useNavigation()
     const params = useRoute().params.data
+    const navigator = useNavigation()
 
     const [showDatePicker, setShowDatePicker] = useState(false)
     const [showHourPicker, setShowHourPicker] = useState(false)
@@ -39,44 +39,24 @@ export default function UpdateProcedings() {
     const [hour, setHour] = useState(new Date(null, null, null, params.hora.slice(0, 2), params.hora.slice(3)))
 
     var proceedingsKeys = params.procedimento
-    const [proceedings, setProceedings] = useState([])
 
-    useEffect(() => {
-        navigation.setOptions({ headerTitle: clientName })
+    const [selectedProceedings, setSelectedProceedings] = useState([])
 
-
-        get(child(ref(db), `procedimentos/${selectedType}`)).then(snapshot => {
-            setProceedings([])
-            let data = snapshot.val()
-            let keys = Object.keys(data)
-
-            keys.forEach(k => {
-                let proceedginsDB = {}
-                proceedginsDB['id'] = k
-                proceedginsDB['name'] = data[k].nome
-                proceedginsDB['selected'] = proceedingsKeys.includes(k) ? true : false
-
-                setProceedings(oldProceedings => [...oldProceedings, proceedginsDB])
-                
-            })
-
-        })
-    }, [selectedType])
 
     function updateShedule() {
 
-        console.log(proceedings)
+        setLoading(true)
         
 
-        // update(ref(db, `agenda/${params.id}`), {
-        //     cliente: clientName,
-        //     data: format(date, 'dd/MM/yyyy'),
-        //     hora: format(hour, 'HH:mm'),
-        //     id: params.id,
-        //     procedimento: selectedObjectKeys(),
-        //     tipo: selectedType,
-        //     valor: totalValue
-        // })
+        update(ref(db, `agenda/${params.id}`), {
+            cliente: clientName,
+            data: format(date, 'dd/MM/yyyy'),
+            hora: format(hour, 'HH:mm'),
+            id: params.id,
+            procedimento: selectedProceedings.map(item => item.id),
+            tipo: selectedType,
+            valor: totalValue
+        }).then(() => navigator.goBack()).finally(() => setLoading(false))
     }
     return (
         <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'} enabled={false}>
@@ -128,13 +108,14 @@ export default function UpdateProcedings() {
                             <S.Underline />
                         </S.Row>
                     </TouchableOpacity>
-                    {proceddingsModalVisible && <ProcedingsModal
+                    <ProcedingsModal
                         setProccedingsModalVisible={setProccedingsModalVisible}
                         proceddingsModalVisible={proceddingsModalVisible}
                         type={selectedType}
-                        proceedings={proceedings}
-                        setProceedings={setProceedings}
-                        cType={selectedType} />}
+                        selectedProceedings={selectedProceedings}
+                        setSelectedProceedings={setSelectedProceedings}
+                        cType={selectedType}
+                        proceedingsKeys={proceedingsKeys} />
 
 
                     <S.Button onPress={() => updateShedule()}>
@@ -145,3 +126,4 @@ export default function UpdateProcedings() {
         </KeyboardAvoidingView>
     );
 }
+
