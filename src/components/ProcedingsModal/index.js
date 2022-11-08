@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { FlatList, Modal, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import * as S from './styles'
@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { child, get, ref } from 'firebase/database';
 import { db } from '../../service/firebase';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function ProcedingsModal({ setProccedingsModalVisible, proceddingsModalVisible, type, selectedProceedings, setSelectedProceedings, proceedingsKeys }) {
 
@@ -17,30 +18,33 @@ export default function ProcedingsModal({ setProccedingsModalVisible, procedding
     const [proceedings, setProceedings] = useState([])
 
 
-    useEffect(() => {
+    useFocusEffect(
+        
+        useCallback(() => {
 
-        get(child(ref(db), 'procedimentos/' + type)).then((snapshot) => {
-            setProceedings([])
-            let data = snapshot.val()
-
-            let keys = Object.keys(data)
-
-            keys.forEach(k => {
-                let proceedginsDB = {}
-                proceedginsDB['id'] = k
-                proceedginsDB['name'] = data[k].nome
-                proceedginsDB['selected'] = proceedingsKeys?.includes(k) ? true : false
-
-                proceedingsKeys?.includes(k) && setSelectedProceedings(oldP => [...oldP, proceedginsDB])
-                    
-                setProceedings(oldProceedings => [...oldProceedings, proceedginsDB])
-
+            get(child(ref(db), 'procedimentos/' + type)).then((snapshot) => {
+                setProceedings([])
+                let data = snapshot.val()
+    
+                let keys = Object.keys(data)
+    
+                keys.forEach(k => {
+                    let proceedginsDB = {}
+                    proceedginsDB['id'] = k
+                    proceedginsDB['name'] = data[k].nome
+                    proceedginsDB['selected'] = proceedingsKeys?.includes(k) ? true : false
+    
+                    proceedingsKeys?.includes(k) && setSelectedProceedings(oldP => [...oldP, proceedginsDB])
+                        
+                    setProceedings(oldProceedings => [...oldProceedings, proceedginsDB])
+    
+                })
             })
-        })
+        }, [])
 
 
 
-    }, [type])
+    )
 
     function searchIconClick() {
         if (!searchInputRef.current.isFocused()) searchInputRef.current.focus()

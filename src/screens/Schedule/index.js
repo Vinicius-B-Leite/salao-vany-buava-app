@@ -53,7 +53,7 @@ export default function Schedule() {
     set(newKey, {
       cliente: clientName,
       data: format(date, 'dd/MM/yyyy'),
-      hora: format(date, 'HH:mm'),
+      hora: format(hour, 'HH:mm'),
       tipo: selectedType,
       valor: totalValue,
       id: newKey.toString().slice(60, newKey.length),

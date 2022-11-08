@@ -46,6 +46,7 @@ export default function Home() {
           }
           setData(oldData => [...oldData, newData])
         })
+        setData(oldP => oldP.sort((a,b) => (a.hora > b.hora ? true : -1)))
       } else setData([])
     })
 

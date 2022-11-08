@@ -1,13 +1,14 @@
 {
   "expo": {
-    "name": "SalaoVanyBuava",
+    "name": "Salao Vany Buava",
     "slug": "SalaoVanyBuava",
     "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
     "android": {
-      "package": "com.viniciusbl21.SalaoVanyBuava"
+      "package": "com.viniciusbl21.SalaoVanyBuava",
+      "adaptiveIcon": {
+        "foregroundImage": "./src/assets/icon.png",
+        "backgroundColor": "#FFFFFF"
+      }
     } 
   }
 }
