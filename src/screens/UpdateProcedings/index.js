@@ -53,9 +53,9 @@ export default function UpdateProcedings() {
             data: format(date, 'dd/MM/yyyy'),
             hora: format(hour, 'HH:mm'),
             id: params.id,
-            procedimento: selectedProceedings.map(item => item.id),
+            procedimento: selectedProceedings.length > 0 ? selectedProceedings.map(item => String(item.id)) : proceedingsKeys,
             tipo: selectedType,
-            valor: totalValue
+            valor: totalValue,
         }).then(() => navigator.goBack()).finally(() => setLoading(false))
     }
     return (
@@ -70,8 +70,8 @@ export default function UpdateProcedings() {
                         <S.Input
                             placeholder='Valor'
                             width='50%'
-                            value={Number(totalValue).toFixed(2).replace('.', ',')}
-                            onChangeText={txt => setTotalValue(txt)}
+                            value={totalValue}
+                            onChangeText={setTotalValue}
                             keyboardType="numeric" />
                     </S.Row>
 

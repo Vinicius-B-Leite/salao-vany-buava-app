@@ -23,10 +23,10 @@ export default function HomeItem({ data }) {
     useEffect(() => {
 
         function getProceedingsName() {
-            let p = data.procedimento
+            let p = data?.procedimento
             setProceedings([])
-            p.forEach(item => {
-                get(child(ref(db), `procedimentos/${data.tipo}/${item}`)).then(snapshot => {
+            p?.forEach(item => {
+                get(child(ref(db), `procedimentos/${data?.tipo}/${item}`)).then(snapshot => {
                     if (snapshot.exists()) {
                         let proceedingsName = Object.values(snapshot.val()).toString()
                         function toCapitalize(str){

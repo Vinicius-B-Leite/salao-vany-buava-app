@@ -12,13 +12,13 @@ export default function Item({ data: proceeding, setSelectedProceedings, selecte
     const [isSelected, setIsSelected] = useState(false)
 
     useEffect(() => {
-        let keys = selectedProceedings.filter(item => item.id === proceeding.id).map(i => i.id.toString())
 
-        setIsSelected(keys.includes(proceeding.id))
+        setIsSelected(selectedProceedings.indexOf(proceeding) > -1 ? true : false)
 
     }, [selectedProceedings])
 
     function updateSelectedStatus(oldP) {
+
 
         if (selectedProceedings.indexOf(proceeding) > -1) {
             let index = selectedProceedings.indexOf(proceeding)
@@ -47,7 +47,7 @@ export default function Item({ data: proceeding, setSelectedProceedings, selecte
                                 let array = [...oldP]
                                 let index = array.indexOf(proceeding)
                                 array.splice(index, 1)
-                                return array
+                                return [...array]
                             })
 
                             if (isSelected) {

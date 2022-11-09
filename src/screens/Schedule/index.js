@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { ActivityIndicator, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
 import * as S from './styles'
@@ -15,6 +15,7 @@ import { db, dbRef } from '../../service/firebase'
 import { child, get, push, ref, set } from 'firebase/database';
 
 import { format } from 'date-fns';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 
@@ -31,21 +32,21 @@ export default function Schedule() {
 
   const [clientName, setClientName] = useState()
   const [selectedType, setSelectedType] = useState('cabelo')
-  const [totalValue, setTotalValue] = useState()
+  const [totalValue, setTotalValue] = useState(0)
   const [date, setDate] = useState(new Date())
   const [hour, setHour] = useState(new Date())
   const [selectedProceedings, setSelectedProceedings] = useState([])
 
 
-
   function submit() {
     setLoading(true)
-    if (!clientName || !selectedType || !totalValue || !date || !hour || !selectedProceedings) {
+    if (!clientName || !selectedType || !totalValue || !date || !hour || selectedProceedings.length < 1) {
       setErrorMessage('Preencha todos os campos')
       setLoading(false)
       return
     }
 
+    setErrorMessage('')    
     let newKey = push(dbRef)
 
     let keysSelected = selectedProceedings.map(item => (item.id))
@@ -62,6 +63,7 @@ export default function Schedule() {
       setLoading(false)
       setClientName('')
       setTotalValue('')
+      setSelectedProceedings([])
     })
 
   }
