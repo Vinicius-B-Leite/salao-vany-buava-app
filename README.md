@@ -30,7 +30,7 @@ Aqui está as tecnologias usadas no projeto
 ### Agendar Cliente
   ![home](github/agendar%20cliente.jpeg)
 ### Agendar Modal Procedimento
-  ![home](github/cadastrar%20procedimento.jpeg)
+  ![home](github/modal.jpeg)
 
 
 ## Funcionalidades
