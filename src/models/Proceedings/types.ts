@@ -5,3 +5,7 @@ export type Proceedings = {
 	id: string
 	name: string
 }
+
+export type proceedingsServiceType = {
+	createProceedings: (proceedingsName: string, type: ProceedingsTypes) => Promise<void>
+}
