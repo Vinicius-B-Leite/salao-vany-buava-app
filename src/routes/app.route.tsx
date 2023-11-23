@@ -1,8 +1,12 @@
 import React from "react"
 import { SafeAreaView, View } from "react-native"
-import { DrawerScreenProps, createDrawerNavigator } from "@react-navigation/drawer"
+import {
+	DrawerNavigationProp,
+	DrawerScreenProps,
+	createDrawerNavigator,
+} from "@react-navigation/drawer"
 import Home from "../screens/Home"
-import { NavigationContainer } from "@react-navigation/native"
+import { NavigationContainer, NavigatorScreenParams } from "@react-navigation/native"
 import Schedule from "../screens/Schedule"
 import CustomDrawer from "../components/CustomDrawer"
 import NewProceedings from "../screens/NewProceedings"
@@ -12,7 +16,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context"
 import AppHomeStack, { AppHomeStackParamslist } from "./appHomeStack"
 
 export type AppRouteParamsList = {
-	ScheduleToday: DrawerScreenProps<AppHomeStackParamslist>
+	ScheduleToday: NavigatorScreenParams<AppHomeStackParamslist>
 	ScheduleClient: undefined
 	NewProceedings: undefined
 }

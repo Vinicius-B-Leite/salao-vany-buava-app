@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { useNavigation } from "@react-navigation/native"
+import { NavigationProp, useNavigation } from "@react-navigation/native"
 
 import { Dimensions, Text, View, TouchableWithoutFeedback, FlatList } from "react-native"
 import * as S from "./styles"
@@ -12,46 +12,45 @@ import { child, get, ref, remove } from "firebase/database"
 import { db } from "../../service/firebase"
 import { ProceedingsTypes } from "../../models/Proceedings/types"
 import { Schedule } from "../../models/Schedule/types"
+import { AppRouteParamsList } from "../../routes/app.route"
+import { proceedingsService } from "../../models/Proceedings/proceedingsService"
 
 const { width, height } = Dimensions.get("screen")
 
 type HomeItemProps = {
 	data: Schedule
 }
+
 export default function HomeItem({ data }: HomeItemProps) {
 	const [proceedings, setProceedings] = useState<string[]>([])
 	const navigation = useNavigation()
 
 	useEffect(() => {
 		function getProceedingsName() {
-			let p = data?.procedimento
+			let p = data?.proceedingsKeys
 			setProceedings([])
-			p?.forEach((item) => {
-				get(child(ref(db), `procedimentos/${data?.tipo}/${item}`)).then(
-					(snapshot) => {
-						if (snapshot.exists()) {
-							let proceedingsName = Object.values(snapshot.val()).toString()
-							function toCapitalize(str) {
-								return str.charAt(0).toUpperCase() + str.slice(1)
-							}
-							setProceedings((oldP) => [
-								...oldP,
-								toCapitalize(proceedingsName),
-							])
-						}
-					}
+			p?.forEach(async (item) => {
+				const proceedings = await proceedingsService.getSingleProceeding(
+					item,
+					data.type
 				)
+
+				let proceedingsName = Object.values(proceedings).toString()
+				function toCapitalize(str) {
+					return str.charAt(0).toUpperCase() + str.slice(1)
+				}
+				setProceedings((oldP) => [...oldP, toCapitalize(proceedingsName)])
 			})
 		}
 		getProceedingsName()
 	}, [data])
 
 	function choseSvg() {
-		if (data.tipo === "cabelo")
+		if (data.type === "cabelo")
 			return <HairSvg width={width / 4.4} height={height / 4} />
-		if (data.tipo === "unha")
+		if (data.type === "unha")
 			return <NailSvg width={width / 4.4} height={height / 14} />
-		if (data.tipo === "cilios")
+		if (data.type === "cilios")
 			return <Eyeslash width={width / 4.4} height={height / 4} />
 	}
 	function handleRemove() {
@@ -59,7 +58,12 @@ export default function HomeItem({ data }: HomeItemProps) {
 	}
 	return (
 		<TouchableWithoutFeedback
-			onPress={() => navigation.navigate("Editar agendamento", { data })}
+			onPress={() =>
+				navigation.navigate("ScheduleToday", {
+					screen: "UpdateSchedule",
+					params: { data },
+				})
+			}
 			onLongPress={() => handleRemove()}>
 			<S.Container>
 				{choseSvg()}

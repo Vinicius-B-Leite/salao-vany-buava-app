@@ -8,4 +8,8 @@ export type Proceedings = {
 
 export type proceedingsServiceType = {
 	createProceedings: (proceedingsName: string, type: ProceedingsTypes) => Promise<void>
+	getSingleProceeding: (
+		proceedingsKey: string,
+		type: ProceedingsTypes
+	) => Promise<Proceedings | null>
 }
