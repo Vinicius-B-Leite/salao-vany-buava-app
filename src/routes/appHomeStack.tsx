@@ -5,7 +5,7 @@ import Home from "../screens/Home"
 import UpdateSchedule from "../screens/UpdateProcedings"
 import { Schedule } from "../models/Schedule/types"
 
-type AppHomeStackParamslist = {
+export type AppHomeStackParamslist = {
 	Home: undefined
 	UpdateSchedule: {
 		data: Schedule
