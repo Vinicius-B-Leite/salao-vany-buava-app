@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react"
-import { useNavigation, useRoute } from "@react-navigation/native"
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 
-import { ActivityIndicator, KeyboardAvoidingView, TouchableOpacity } from "react-native"
+import {
+	ActivityIndicator,
+	KeyboardAvoidingView,
+	Platform,
+	TouchableOpacity,
+} from "react-native"
 import * as S from "../Schedule/styles"
 
 import DatePicker from "../../components/DatePicker"
@@ -12,13 +17,14 @@ import ProcedingsModal from "../../components/ProcedingsModal"
 import { Feather } from "@expo/vector-icons"
 import { Entypo } from "@expo/vector-icons"
 
-import { ref, update } from "firebase/database"
-import { db } from "../../service/firebase"
-
 import { format } from "date-fns"
+import { AppHomeStackParamslist } from "../../routes/appHomeStack"
+import { scheduleService } from "../../models/Schedule/scheduleService"
+
+type Route = RouteProp<AppHomeStackParamslist, "UpdateSchedule">
 
 export default function UpdateSchedule() {
-	const params = useRoute().params.data
+	const params = useRoute<Route>().params.data
 	const navigator = useNavigation()
 
 	const [showDatePicker, setShowDatePicker] = useState(false)
@@ -27,42 +33,37 @@ export default function UpdateSchedule() {
 	const [errorMessage, setErrorMessage] = useState()
 	const [loading, setLoading] = useState(false)
 
-	const [clientName, setClientName] = useState(params.cliente)
-	const [selectedType, setSelectedType] = useState(params.tipo)
-	const [totalValue, setTotalValue] = useState(params.valor)
-	const [date, setDate] = useState(
-		new Date(
-			`${params.data.slice(6)}/${params.data.slice(3, 5)}/${params.data.slice(
-				0,
-				2
-			)}`
-		)
-	)
-	const [hour, setHour] = useState(
-		new Date(null, null, null, params.hora.slice(0, 2), params.hora.slice(3))
-	)
+	const [clientName, setClientName] = useState(params.clientName)
+	const [selectedType, setSelectedType] = useState(params.type)
+	const [totalValue, setTotalValue] = useState(params.totalValue)
+	const [date, setDate] = useState(new Date(params.date))
+	const [hour, setHour] = useState(new Date(params.date))
 
-	var proceedingsKeys = params.procedimento
+	var proceedingsKeys = params.proceedingsKeys
 
 	const [selectedProceedings, setSelectedProceedings] = useState([])
 
-	function updateShedule() {
+	async function updateShedule() {
 		setLoading(true)
 
-		update(ref(db, `agenda/${params.id}`), {
-			cliente: clientName,
-			data: format(date, "dd/MM/yyyy"),
-			hora: format(hour, "HH:mm"),
-			id: params.id,
-			procedimento:
-				selectedProceedings.length > 0
-					? selectedProceedings.map((item) => String(item.id))
-					: proceedingsKeys,
-			tipo: selectedType,
-			valor: totalValue,
-		})
-			.then(() => navigator.goBack())
-			.finally(() => setLoading(false))
+		try {
+			await scheduleService.updateSchedule({
+				clientName,
+				date,
+				hour: format(hour, "HH/mm"),
+				id: params.id,
+				proceedingsKeys:
+					selectedProceedings.length > 0
+						? selectedProceedings.map((item) => String(item.id))
+						: proceedingsKeys,
+				type: selectedType,
+				totalValue,
+			})
+			navigator.goBack()
+		} catch (error) {
+		} finally {
+			setLoading(false)
+		}
 	}
 	return (
 		<KeyboardAvoidingView
@@ -75,7 +76,7 @@ export default function UpdateSchedule() {
 					<S.Input
 						placeholder="Nome da cliente"
 						value={clientName}
-						onChangeText={(txt) => setClientName(txt)}
+						onChangeText={setClientName}
 					/>
 
 					<S.Row>
@@ -146,7 +147,6 @@ export default function UpdateSchedule() {
 						type={selectedType}
 						selectedProceedings={selectedProceedings}
 						setSelectedProceedings={setSelectedProceedings}
-						cType={selectedType}
 						proceedingsKeys={proceedingsKeys}
 					/>
 

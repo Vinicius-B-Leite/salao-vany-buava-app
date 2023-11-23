@@ -1,6 +1,15 @@
-import { equalTo, onValue, orderByChild, push, query, set } from "firebase/database"
+import {
+	equalTo,
+	onValue,
+	orderByChild,
+	push,
+	query,
+	ref,
+	set,
+	update,
+} from "firebase/database"
 import { Schedule, ScheduleService } from "./types"
-import { dbRef } from "../../service/firebase"
+import { db, dbRef } from "../../service/firebase"
 import { format } from "date-fns"
 import { localNotification } from "../../service/localNotification/localNotificatoinService"
 
@@ -69,5 +78,24 @@ export const scheduleService: ScheduleService = {
 		} catch (error) {
 			throw error
 		}
+	},
+	updateSchedule: async ({
+		id,
+		clientName,
+		date,
+		hour,
+		totalValue,
+		type,
+		proceedingsKeys,
+	}: Schedule) => {
+		await update(ref(db, `agenda/${id}`), {
+			cliente: clientName,
+			data: format(date, "dd/MM/yyyy"),
+			hora: hour,
+			id: id,
+			procedimento: proceedingsKeys,
+			tipo: type,
+			valor: totalValue,
+		})
 	},
 }

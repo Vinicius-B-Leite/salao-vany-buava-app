@@ -37,6 +37,7 @@ export default function Schedule() {
 	const [date, setDate] = useState(new Date())
 	const [hour, setHour] = useState(new Date())
 	const [selectedProceedings, setSelectedProceedings] = useState<Proceedings[]>([])
+	console.log(hour)
 
 	async function submit() {
 		setLoading(true)

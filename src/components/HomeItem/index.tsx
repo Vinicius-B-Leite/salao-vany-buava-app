@@ -56,14 +56,26 @@ export default function HomeItem({ data }: HomeItemProps) {
 	function handleRemove() {
 		remove(ref(db, "agenda/" + data.id))
 	}
+	function handleNavigateToUpdateSchedule() {
+		const newDate = new Date(data.date)
+
+		const [day, month, year] = data.date.toString().split("/")
+		const [hour, minute] = data.hour.split(":")
+
+		newDate.setMonth(Number(month))
+		newDate.setFullYear(Number(year))
+		newDate.setDate(Number(day))
+		newDate.setHours(Number(hour))
+		newDate.setMinutes(Number(minute))
+
+		navigation.navigate("ScheduleToday", {
+			screen: "UpdateSchedule",
+			params: { data: { ...data, date: newDate } },
+		})
+	}
 	return (
 		<TouchableWithoutFeedback
-			onPress={() =>
-				navigation.navigate("ScheduleToday", {
-					screen: "UpdateSchedule",
-					params: { data },
-				})
-			}
+			onPress={() => handleNavigateToUpdateSchedule()}
 			onLongPress={() => handleRemove()}>
 			<S.Container>
 				{choseSvg()}
