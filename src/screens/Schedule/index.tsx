@@ -21,75 +21,59 @@ import { child, get, push, ref, set } from "firebase/database"
 
 import { format } from "date-fns"
 import { useFocusEffect } from "@react-navigation/native"
-import * as Notifications from "expo-notifications"
+import { Proceedings, ProceedingsTypes } from "../../models/Proceedings/types"
+import { scheduleService } from "../../models/Schedule/scheduleService"
 
 export default function Schedule() {
 	const [showDatePicker, setShowDatePicker] = useState(false)
 	const [showHourPicker, setShowHourPicker] = useState(false)
-	const [proceddingsModalVisible, setProccedingsModalVisible] =
-		useState(false)
-	const [errorMessage, setErrorMessage] = useState()
+	const [proceddingsModalVisible, setProccedingsModalVisible] = useState(false)
+	const [errorMessage, setErrorMessage] = useState("")
 	const [loading, setLoading] = useState(false)
 
-	const [clientName, setClientName] = useState()
-	const [selectedType, setSelectedType] = useState("cabelo")
-	const [totalValue, setTotalValue] = useState(0)
+	const [clientName, setClientName] = useState("")
+	const [selectedType, setSelectedType] = useState<ProceedingsTypes>("cabelo")
+	const [totalValue, setTotalValue] = useState("")
 	const [date, setDate] = useState(new Date())
 	const [hour, setHour] = useState(new Date())
-	const [selectedProceedings, setSelectedProceedings] = useState([])
+	const [selectedProceedings, setSelectedProceedings] = useState<Proceedings[]>([])
 
-	function submit() {
+	async function submit() {
 		setLoading(true)
-		if (
+		const isSomeInputempty =
 			!clientName ||
 			!selectedType ||
 			!totalValue ||
 			!date ||
 			!hour ||
 			selectedProceedings.length < 1
-		) {
+
+		if (isSomeInputempty) {
 			setErrorMessage("Preencha todos os campos")
 			setLoading(false)
 			return
 		}
 
 		setErrorMessage("")
-		let newKey = push(dbRef)
 
-		let keysSelected = selectedProceedings.map((item) => item.id)
-
-		set(newKey, {
-			cliente: clientName,
-			data: format(date, "dd/MM/yyyy"),
-			hora: format(hour, "HH:mm"),
-			tipo: selectedType,
-			valor: totalValue,
-			id: newKey.toString().slice(60, newKey.length),
-			procedimento: keysSelected,
-		})
-			.then(async () => {
-				let dateToDisplayNotification = new Date(date)
-				dateToDisplayNotification.setHours(7)
-				await Notifications.scheduleNotificationAsync({
-					content: {
-						title: "Vany, você tem cliente hoje!!",
-						body: `A cliente ${clientName} está marcada para hoje às ${format(
-							date,
-							"HH:mm"
-						)}`,
-						data: { data: "goes here" },
-					},
-					trigger: {
-						date: dateToDisplayNotification,
-					},
-				})
+		try {
+			let keysSelected = selectedProceedings.map((item) => item.id)
+			await scheduleService.createSchedule({
+				clientName,
+				date,
+				hour,
+				proceedingsKeys: keysSelected,
+				totalValue: Number(totalValue),
+				type: selectedType,
 			})
-			.finally(() => {
-				setLoading(false)
-				setClientName("")
-				setTotalValue("")
-				setSelectedProceedings([])
-			})
+		} catch (error) {
+			console.log(`submit - Schedule (Screen) - line 70 ${error}`)
+		} finally {
+			setLoading(false)
+			setClientName("")
+			setTotalValue("")
+			setSelectedProceedings([])
+		}
 	}
 
 	return (
@@ -103,7 +87,7 @@ export default function Schedule() {
 					<S.Input
 						placeholder="Nome da cliente"
 						value={clientName}
-						onChangeText={(txt) => setClientName(txt)}
+						onChangeText={setClientName}
 					/>
 
 					<S.Row>
@@ -115,7 +99,7 @@ export default function Schedule() {
 							placeholder="Valor"
 							width="50%"
 							value={totalValue}
-							onChangeText={(txt) => setTotalValue(txt)}
+							onChangeText={setTotalValue}
 							keyboardType="numeric"
 						/>
 					</S.Row>
@@ -123,14 +107,8 @@ export default function Schedule() {
 					<S.Row>
 						<S.Row width="45%">
 							<TouchableOpacity
-								onPress={() =>
-									setShowDatePicker(!showDatePicker)
-								}>
-								<Entypo
-									name="calendar"
-									size={24}
-									color="#fff"
-								/>
+								onPress={() => setShowDatePicker(!showDatePicker)}>
+								<Entypo name="calendar" size={24} color="#fff" />
 							</TouchableOpacity>
 							<S.Input
 								placeholder="Data"
@@ -149,9 +127,7 @@ export default function Schedule() {
 
 						<S.Row width="45%">
 							<TouchableOpacity
-								onPress={() =>
-									setShowHourPicker(!showHourPicker)
-								}>
+								onPress={() => setShowHourPicker(!showHourPicker)}>
 								<Feather name="clock" size={24} color="#fff" />
 							</TouchableOpacity>
 							{showHourPicker && (
@@ -169,15 +145,10 @@ export default function Schedule() {
 						</S.Row>
 					</S.Row>
 
-					<TouchableOpacity
-						onPress={() => setProccedingsModalVisible(true)}>
+					<TouchableOpacity onPress={() => setProccedingsModalVisible(true)}>
 						<S.Row>
 							<S.ScheduleTitle>Procedimentos</S.ScheduleTitle>
-							<Entypo
-								name="triangle-down"
-								size={24}
-								color="#fff"
-							/>
+							<Entypo name="triangle-down" size={24} color="#fff" />
 							<S.Underline />
 						</S.Row>
 					</TouchableOpacity>
@@ -187,6 +158,7 @@ export default function Schedule() {
 						type={selectedType}
 						selectedProceedings={selectedProceedings}
 						setSelectedProceedings={setSelectedProceedings}
+						proceedingsKeys={[]}
 					/>
 
 					<S.Button onPress={() => submit()}>

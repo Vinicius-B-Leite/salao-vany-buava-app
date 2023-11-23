@@ -6,7 +6,7 @@ import { ProceedingsTypes } from "../../models/Proceedings/types"
 type TypePickerProps = {
 	selectedType: ProceedingsTypes
 	setSelectedType: (oldValue: ProceedingsTypes) => void
-	width: number | string
+	width?: number | string
 }
 export default function TypePicker({
 	selectedType,
