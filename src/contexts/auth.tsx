@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from "react"
 import { signInWithEmailAndPassword, getAuth } from "firebase/auth"
-import { app } from "../service/firebase"
+import { app, auth } from "../service/firebase"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { User } from "../models/User/types"
 
@@ -28,7 +28,7 @@ export default function AuthContextProvider({ children }) {
 
 	function login(email: string, password: string) {
 		setLoadingLogin(true)
-		signInWithEmailAndPassword(getAuth(app), email, password)
+		signInWithEmailAndPassword(auth, email, password)
 			.then(async () => {
 				await AsyncStorage.setItem("_user", JSON.stringify({ email, password }))
 				setUser({ email, password })
