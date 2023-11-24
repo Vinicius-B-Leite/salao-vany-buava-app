@@ -1,10 +1,13 @@
 import React, { useContext, useState } from "react"
 
-import { ActivityIndicator, Dimensions, TouchableOpacity } from "react-native"
+import { ActivityIndicator, Dimensions, Image, TouchableOpacity } from "react-native"
 import * as S from "./styles"
-import LogoSvg from "../../assets/logo.svg"
 import { AuthContext } from "../../contexts/auth"
 import { Entypo } from "@expo/vector-icons"
+import Logo from "@/assets/logo.png"
+import { Input } from "@/components/Input/Input"
+import Icon from "@/components/Icon/Icon"
+import { PasswordInput } from "@/components/PasswordInput/PasswordInput"
 
 const { width, height } = Dimensions.get("screen")
 
@@ -16,36 +19,13 @@ export default function Login() {
 
 	return (
 		<S.Container>
-			<LogoSvg width={width / 1.2} height={height / 2.5} />
+			<Image source={Logo} />
 
 			{errorLogin && <S.Error>{errorLogin}</S.Error>}
-			<S.InputContainer>
-				<S.TextInput>Email</S.TextInput>
-				<S.Input
-					value={email}
-					onChangeText={(text) => setEmail(text)}
-					autoCapitalize={false}
-					keyboardType="email-adress"
-				/>
-			</S.InputContainer>
 
-			<S.InputContainer>
-				<S.TextInput>Senha</S.TextInput>
-				<S.Input
-					value={password}
-					onChangeText={(text) => setPassword(text)}
-					secureTextEntry={hidePassword}
-					autoCapitalize={false}
-				/>
+			<Input label="Email" placeholder="Digite seu email" />
 
-				<TouchableOpacity onPress={() => setHidePassword(!hidePassword)}>
-					{hidePassword ? (
-						<Entypo name="eye" size={20} color="#fff" />
-					) : (
-						<Entypo name="eye-with-line" size={20} color="#fff" />
-					)}
-				</TouchableOpacity>
-			</S.InputContainer>
+			<PasswordInput label="Senha" placeholder="Digite sua senha" />
 
 			<S.LoginButton onPress={() => login(email, password)}>
 				<S.TextLoginButton>

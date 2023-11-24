@@ -6,6 +6,8 @@ import Login from "./src/screens/Login"
 import { StatusBar } from "react-native"
 
 import * as Notifications from "expo-notifications"
+import { ThemeProvider } from "@shopify/restyle"
+import theme from "@/theme"
 
 Notifications.setNotificationHandler({
 	handleNotification: async () => ({
@@ -19,7 +21,9 @@ export default function App() {
 	return (
 		<AuthContextProvider>
 			<StatusBar />
-			<Routes />
+			<ThemeProvider theme={theme}>
+				<Routes />
+			</ThemeProvider>
 		</AuthContextProvider>
 	)
 }

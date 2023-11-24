@@ -4,9 +4,9 @@ import { NavigationProp, useNavigation } from "@react-navigation/native"
 import { Dimensions, Text, View, TouchableWithoutFeedback, FlatList } from "react-native"
 import * as S from "./styles"
 
-import HairSvg from "../../assets/hair.svg"
-import NailSvg from "../../assets/nailpolish.svg"
-import Eyeslash from "../../assets/yeyslash.svg"
+import HairSvg from "@/assets/hair.svg"
+import NailSvg from "@/assets/nail.svg"
+import Eyeslash from "@/assets/eyelash.svg"
 
 import { child, get, ref, remove } from "firebase/database"
 import { db } from "../../service/firebase"

@@ -5,7 +5,7 @@ const theme = createTheme({
 	colors: darkPalette,
 	spacing: {
 		s2: 2,
-		s10: 10,
+		s12: 12,
 		s16: 16,
 		s30: 30,
 		s37: 37,
@@ -19,8 +19,8 @@ const theme = createTheme({
 			color: "text",
 		},
 		pRegular: {
-			lineHeight: 15,
-			fontSize: 18,
+			lineHeight: 18,
+			fontSize: 15,
 			color: "text",
 		},
 		tRegular: {
