@@ -1,6 +1,5 @@
 import { Input, InputProps } from "@/components/Input/Input"
 import React, { useState } from "react"
-import { Pressable, View } from "react-native"
 import { Entypo } from "@expo/vector-icons"
 import { useTheme } from "@shopify/restyle"
 import { BoxPressable } from "../Box/Box"
@@ -10,6 +9,7 @@ export const PasswordInput: React.FC<InputProps> = ({ ...rest }) => {
 	const { colors } = useTheme()
 	return (
 		<Input
+			autoCapitalize="none"
 			secureTextEntry={secureText}
 			rigthIcon={
 				<BoxPressable
@@ -17,7 +17,7 @@ export const PasswordInput: React.FC<InputProps> = ({ ...rest }) => {
 					onPress={() => setSecureText((oldValue) => !oldValue)}>
 					<Entypo
 						name={secureText ? "eye-with-line" : "eye"}
-						size={20}
+						size={18}
 						color={colors.text}
 					/>
 				</BoxPressable>

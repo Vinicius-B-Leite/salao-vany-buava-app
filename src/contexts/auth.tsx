@@ -7,14 +7,17 @@ import { User } from "../models/User/types"
 export type AuthContextProps = {
 	isLogged: boolean
 	login: (email: string, password: string) => void
-	errorLogin: string
+	errorLogin: {
+		email: string
+		password: string
+	}
 	loadingLogin: boolean
 }
 export const AuthContext = createContext({} as AuthContextProps)
 
-export default function AuthContextProvider({ children }) {
+export default function AuthContextProvider({ children }: { children: React.ReactNode }) {
 	const [user, setUser] = useState<User | null>(null)
-	const [errorLogin, setErrorLogin] = useState("")
+	const [errorLogin, setErrorLogin] = useState({ email: "", password: "" })
 	const [loadingLogin, setLoadingLogin] = useState(false)
 
 	useEffect(() => {
@@ -35,15 +38,20 @@ export default function AuthContextProvider({ children }) {
 				setLoadingLogin(false)
 			})
 			.catch((error) => {
-				if (!email && !password) setErrorLogin("Preencha os campos")
-				else if (error.code === "auth/invalid-email")
-					setErrorLogin("Digite um email válido")
-				else if (error.code === "auth/user-not-found")
-					setErrorLogin("Usuário não encontrado")
+				console.log(error.code)
+
+				// setErrorLogin({ email: "", password: "" })
+				if (["auth/invalid-email", "auth/user-not-found"].includes(error.code))
+					setErrorLogin((oldError) => ({
+						...oldError,
+						email: "Usuário não encontrado",
+					}))
 				else if (error.code === "auth/wrong-password")
-					setErrorLogin("Senha inválida")
-				else if (error.code === "auth/network-request-failed")
-					setErrorLogin("Falha com a conexão")
+					setErrorLogin((oldError) => ({
+						...oldError,
+						password: "Senha errada",
+					}))
+
 				setLoadingLogin(false)
 			})
 	}

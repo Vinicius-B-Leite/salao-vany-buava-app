@@ -1,33 +1,56 @@
-import React, { useContext, useState } from "react"
+import React, { useContext } from "react"
 
-import { ActivityIndicator, Dimensions, Image, TouchableOpacity } from "react-native"
-import * as S from "./styles"
+import { Image } from "react-native"
 import { AuthContext } from "../../contexts/auth"
-import { Entypo } from "@expo/vector-icons"
 import Logo from "@/assets/logo.png"
-import { Input } from "@/components/Input/Input"
-import Icon from "@/components/Icon/Icon"
-import { PasswordInput } from "@/components/PasswordInput/PasswordInput"
 import Button from "@/components/Button/Button"
-
-const { width, height } = Dimensions.get("screen")
+import Container from "@/components/Container/Container"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { LoginForm, loginSchema } from "./loginSchema"
+import { FormInput } from "@/components/Form/FormInput"
+import { FormPasswordInput } from "@/components/Form/FormPasswordInput"
 
 export default function Login() {
 	const { loadingLogin, login, errorLogin } = useContext(AuthContext)
-	const [email, setEmail] = useState("")
-	const [password, setPassword] = useState("")
+	const { control, formState, handleSubmit } = useForm<LoginForm>({
+		resolver: zodResolver(loginSchema),
+		defaultValues: {
+			email: "",
+			password: "",
+		},
+		mode: "all",
+	})
 
+	const handleLogin = (data: LoginForm) => {
+		login(data.email, data.password)
+	}
 	return (
-		<S.Container style={{ padding: "20%" }}>
+		<Container scrollEnabled alignItems="center">
 			<Image source={Logo} />
 
-			{errorLogin && <S.Error>{errorLogin}</S.Error>}
+			<FormInput
+				name="email"
+				control={control}
+				label="Email"
+				placeholder="Digite seu email"
+				errorMessage={formState.errors.email?.message || errorLogin.email}
+			/>
 
-			<Input label="Email" placeholder="Digite seu email" />
+			<FormPasswordInput
+				control={control}
+				name="password"
+				label="Senha"
+				placeholder="Digite sua senha"
+				errorMessage={formState.errors.password?.message || errorLogin.password}
+			/>
 
-			<PasswordInput label="Senha" placeholder="Digite sua senha" />
-
-			<Button title="Entrar" disabled onPress={() => console.log("clicou")} />
-		</S.Container>
+			<Button
+				title="Entrar"
+				disabled={!formState.isValid}
+				isLoading={loadingLogin}
+				onPress={handleSubmit(handleLogin)}
+			/>
+		</Container>
 	)
 }

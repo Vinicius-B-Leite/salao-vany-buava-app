@@ -13,19 +13,13 @@ export type InputProps = TextInputProps & {
 	errorMessage?: string
 }
 
-export const Input: React.FC<InputProps> = ({
-	label,
-	leftIcon,
-	rigthIcon,
-	errorMessage,
-	...rest
-}) => {
+export function Input({ label, leftIcon, rigthIcon, errorMessage, ...rest }: InputProps) {
 	const { colors, textVariants } = useTheme<Theme>()
 	const inputRef = useRef<TextInput>(null)
 	const [isFocus, setIsFocus] = useState(false)
 
 	const focusInput = () => {
-		inputRef.current.focus()
+		inputRef?.current?.focus()
 	}
 
 	return (
@@ -40,7 +34,7 @@ export const Input: React.FC<InputProps> = ({
 						position="absolute"
 						bg="bg"
 						paddingHorizontal="s12"
-						top={-10}
+						top={-15}
 						left={20}>
 						<Text variant="pRegular" textAlign="center">
 							{label}
@@ -70,6 +64,7 @@ export const Input: React.FC<InputProps> = ({
 					{rigthIcon}
 				</Box>
 			</BoxPressable>
+
 			{errorMessage && (
 				<Text color="alert" variant="pMinimun" textAlign="left" mt="s12">
 					{errorMessage}
