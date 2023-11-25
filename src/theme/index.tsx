@@ -23,6 +23,12 @@ const theme = createTheme({
 			fontSize: 15,
 			color: "text",
 		},
+		pRegularBold: {
+			lineHeight: 18,
+			fontSize: 15,
+			color: "text",
+			fontWeight: "bold",
+		},
 		tRegular: {
 			lineHeight: 20,
 			fontSize: 24,

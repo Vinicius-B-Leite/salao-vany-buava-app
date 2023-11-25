@@ -8,6 +8,7 @@ import Logo from "@/assets/logo.png"
 import { Input } from "@/components/Input/Input"
 import Icon from "@/components/Icon/Icon"
 import { PasswordInput } from "@/components/PasswordInput/PasswordInput"
+import Button from "@/components/Button/Button"
 
 const { width, height } = Dimensions.get("screen")
 
@@ -15,10 +16,9 @@ export default function Login() {
 	const { loadingLogin, login, errorLogin } = useContext(AuthContext)
 	const [email, setEmail] = useState("")
 	const [password, setPassword] = useState("")
-	const [hidePassword, setHidePassword] = useState(true)
 
 	return (
-		<S.Container>
+		<S.Container style={{ padding: "20%" }}>
 			<Image source={Logo} />
 
 			{errorLogin && <S.Error>{errorLogin}</S.Error>}
@@ -27,15 +27,7 @@ export default function Login() {
 
 			<PasswordInput label="Senha" placeholder="Digite sua senha" />
 
-			<S.LoginButton onPress={() => login(email, password)}>
-				<S.TextLoginButton>
-					{loadingLogin ? (
-						<ActivityIndicator size={20} color="#fff" />
-					) : (
-						"Entrar"
-					)}
-				</S.TextLoginButton>
-			</S.LoginButton>
+			<Button title="Entrar" disabled onPress={() => console.log("clicou")} />
 		</S.Container>
 	)
 }
