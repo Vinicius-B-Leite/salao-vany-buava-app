@@ -11,7 +11,7 @@ export const passwordErrors = {
 	"auth/weak-password": "A senha é muito fraca.",
 	"auth/wrong-password": "Senha incorreta.",
 }
-export const errors = {
+export const firebaseAuthErrors = {
 	...emailErros,
 	...passwordErrors,
 }

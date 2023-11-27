@@ -1,12 +1,18 @@
 import React, { createContext, useEffect, useState } from "react"
-import { signInWithEmailAndPassword, getAuth } from "firebase/auth"
+import { signInWithEmailAndPassword, getAuth, AuthErrorCodes } from "firebase/auth"
 import { app, auth } from "../service/firebase"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { User } from "../models/User/types"
+import {
+	emailErros,
+	firebaseAuthErrors,
+	passwordErrors,
+} from "@/utlis/firebaseAuthErrors"
+import { FirebaseError } from "firebase/app"
 
 export type AuthContextProps = {
 	isLogged: boolean
-	login: (email: string, password: string) => void
+	login: (email: string, password: string) => Promise<void>
 	errorLogin: {
 		email: string
 		password: string
@@ -29,31 +35,28 @@ export default function AuthContextProvider({ children }: { children: React.Reac
 		getUser()
 	}, [])
 
-	function login(email: string, password: string) {
+	async function login(email: string, password: string) {
 		setLoadingLogin(true)
-		signInWithEmailAndPassword(auth, email, password)
-			.then(async () => {
-				await AsyncStorage.setItem("_user", JSON.stringify({ email, password }))
-				setUser({ email, password })
-				setLoadingLogin(false)
-			})
-			.catch((error) => {
-				console.log(error.code)
-
-				// setErrorLogin({ email: "", password: "" })
-				if (["auth/invalid-email", "auth/user-not-found"].includes(error.code))
-					setErrorLogin((oldError) => ({
-						...oldError,
-						email: "Usuário não encontrado",
-					}))
-				else if (error.code === "auth/wrong-password")
-					setErrorLogin((oldError) => ({
-						...oldError,
-						password: "Senha errada",
-					}))
-
-				setLoadingLogin(false)
-			})
+		setErrorLogin({ email: "", password: "" })
+		try {
+			await signInWithEmailAndPassword(auth, email, password)
+			setUser({ email, password })
+		} catch (error) {
+			if (!(error instanceof FirebaseError)) return
+			const errorCode = error.code as keyof typeof firebaseAuthErrors
+			const isHandlerError = Object.keys(firebaseAuthErrors).includes(errorCode)
+			if (isHandlerError) {
+				const isemailError = Object.keys(emailErros).includes(errorCode)
+				if (isemailError)
+					setErrorLogin({ password: "", email: firebaseAuthErrors[errorCode] })
+				const isPasswordError = Object.keys(passwordErrors).includes(errorCode)
+				if (isPasswordError)
+					setErrorLogin({ password: firebaseAuthErrors[errorCode], email: "" })
+			}
+		} finally {
+			setLoadingLogin(false)
+		}
+		;``
 	}
 
 	return (
