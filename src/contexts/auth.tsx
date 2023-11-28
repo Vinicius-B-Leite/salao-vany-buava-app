@@ -9,6 +9,7 @@ import {
 	passwordErrors,
 } from "@/utlis/firebaseAuthErrors"
 import { FirebaseError } from "firebase/app"
+import { userService } from "@/models/User/userService"
 
 export type AuthContextProps = {
 	isLogged: boolean
@@ -27,12 +28,7 @@ export default function AuthContextProvider({ children }: { children: React.Reac
 	const [loadingLogin, setLoadingLogin] = useState(false)
 
 	useEffect(() => {
-		async function getUser() {
-			const user = await AsyncStorage.getItem("_user")
-			if (user) setUser(JSON.parse(user))
-		}
-
-		getUser()
+		userService.getStorageUser().then((user) => user && setUser(user))
 	}, [])
 
 	async function login(email: string, password: string) {
@@ -41,6 +37,7 @@ export default function AuthContextProvider({ children }: { children: React.Reac
 		try {
 			await signInWithEmailAndPassword(auth, email, password)
 			setUser({ email, password })
+			await userService.setStorageUser({ email, password })
 		} catch (error) {
 			if (!(error instanceof FirebaseError)) return
 			const errorCode = error.code as keyof typeof firebaseAuthErrors
@@ -56,7 +53,6 @@ export default function AuthContextProvider({ children }: { children: React.Reac
 		} finally {
 			setLoadingLogin(false)
 		}
-		;``
 	}
 
 	return (
