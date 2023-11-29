@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from "react"
 import { NavigationProp, useNavigation } from "@react-navigation/native"
 
-import { Dimensions, Text, View, TouchableWithoutFeedback, FlatList } from "react-native"
-import * as S from "./styles"
+import { Dimensions, FlatList } from "react-native"
 
-import HairSvg from "@/assets/hair.svg"
-import NailSvg from "@/assets/nail.svg"
-import Eyeslash from "@/assets/eyelash.svg"
+import { ref, remove } from "firebase/database"
+import { db } from "../../../service/firebase"
 
-import { child, get, ref, remove } from "firebase/database"
-import { db } from "../../service/firebase"
-import { ProceedingsTypes } from "../../models/Proceedings/types"
-import { Schedule } from "../../models/Schedule/types"
-import { AppRouteParamsList } from "../../routes/app.route"
-import { proceedingsService } from "../../models/Proceedings/proceedingsService"
+import { Schedule } from "../../../models/Schedule/types"
 
-const { width, height } = Dimensions.get("screen")
+import { proceedingsService } from "../../../models/Proceedings/proceedingsService"
+import {
+	Box,
+	BoxPressable,
+	BoxType,
+	Icon,
+	mapTypeProceedingsIcon,
+	Text,
+} from "@/components"
+
+const { height } = Dimensions.get("screen")
 
 type HomeItemProps = {
 	data: Schedule
@@ -25,6 +28,14 @@ export default function HomeItem({ data }: HomeItemProps) {
 	const [proceedings, setProceedings] = useState<string[]>([])
 	const navigation = useNavigation()
 
+	const mapTranslateIcon: Record<
+		"cabelo" | "unha" | "cilios",
+		keyof typeof mapTypeProceedingsIcon
+	> = {
+		cabelo: "hair",
+		unha: "nail",
+		cilios: "eyeslash",
+	}
 	useEffect(() => {
 		function getProceedingsName() {
 			let p = data?.proceedingsKeys
@@ -34,9 +45,9 @@ export default function HomeItem({ data }: HomeItemProps) {
 					item,
 					data.type
 				)
-
+				if (!proceedings) return
 				let proceedingsName = Object.values(proceedings).toString()
-				function toCapitalize(str) {
+				function toCapitalize(str: string) {
 					return str.charAt(0).toUpperCase() + str.slice(1)
 				}
 				setProceedings((oldP) => [...oldP, toCapitalize(proceedingsName)])
@@ -45,14 +56,6 @@ export default function HomeItem({ data }: HomeItemProps) {
 		getProceedingsName()
 	}, [data])
 
-	function choseSvg() {
-		if (data.type === "cabelo")
-			return <HairSvg width={width / 4.4} height={height / 4} />
-		if (data.type === "unha")
-			return <NailSvg width={width / 4.4} height={height / 14} />
-		if (data.type === "cilios")
-			return <Eyeslash width={width / 4.4} height={height / 4} />
-	}
 	function handleRemove() {
 		remove(ref(db, "agenda/" + data.id))
 	}
@@ -74,26 +77,42 @@ export default function HomeItem({ data }: HomeItemProps) {
 		})
 	}
 	return (
-		<TouchableWithoutFeedback
+		<BoxPressable
 			onPress={() => handleNavigateToUpdateSchedule()}
-			onLongPress={() => handleRemove()}>
-			<S.Container>
-				{choseSvg()}
-				<S.InfoContainer>
-					<S.Name>{data.clientName}</S.Name>
-					<S.Hour>{data.hour}</S.Hour>
-				</S.InfoContainer>
-				<S.ProcedureContainer>
+			onLongPress={() => handleRemove()}
+			height={65}
+			mb="s30">
+			<Box {...wrapper}>
+				<Box flex={0.25}>
+					<Icon name={mapTranslateIcon[data.type] || "hair"} size={40} />
+				</Box>
+				<Box justifyContent="center" flex={0.5}>
+					<Text variant="pRegular" mb="s2">
+						{data.clientName}
+					</Text>
+					<Text variant="pMinimun">{data.hour}</Text>
+				</Box>
+				<Box flex={0.25}>
 					<FlatList
 						style={{ height: height / 18 }}
 						data={proceedings}
 						keyExtractor={(item) => item}
 						renderItem={({ item }) => (
-							<S.Procedure numberOfLines={1}>{item}</S.Procedure>
+							<Text variant="pRegular" numberOfLines={1}>
+								{item}
+							</Text>
 						)}
 					/>
-				</S.ProcedureContainer>
-			</S.Container>
-		</TouchableWithoutFeedback>
+				</Box>
+			</Box>
+		</BoxPressable>
 	)
+}
+
+const wrapper: BoxType = {
+	bg: "contrastSecond",
+	flexDirection: "row",
+	borderRadius: "s5",
+	p: "s16",
+	alignItems: "center",
 }

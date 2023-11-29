@@ -1,8 +1,7 @@
-import { Box, BoxPressable } from "@/components/Box/Box"
 import React from "react"
 import { AntDesign } from "@expo/vector-icons"
 import { useTheme } from "@shopify/restyle"
-import Text from "@/components/Text/Text"
+import { Text, Box, BoxPressable } from "@/components"
 import { daysOfWeek } from "@/utlis/daysOfWeek"
 import { months } from "@/utlis/months"
 

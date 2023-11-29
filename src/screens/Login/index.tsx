@@ -3,15 +3,12 @@ import React, { useContext } from "react"
 import { Image } from "react-native"
 import { AuthContext } from "../../contexts/auth"
 import Logo from "@/assets/logo.png"
-import Button from "@/components/Button/Button"
-import Container from "@/components/Container/Container"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { LoginForm, loginSchema } from "./loginSchema"
 import { FormInput } from "@/components/Form/FormInput"
 import { FormPasswordInput } from "@/components/Form/FormPasswordInput"
-import Spinner from "@/components/Spinner/Spinner"
-import { Box } from "@/components/Box/Box"
+import { Spinner, Container, Button } from "@/components"
 
 export default function Login() {
 	const { loadingLogin, login, errorLogin, loadingGetUser } = useContext(AuthContext)

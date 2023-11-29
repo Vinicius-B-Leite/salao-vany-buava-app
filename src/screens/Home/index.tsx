@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 
 import { FlatList } from "react-native"
 
-import HomeItem from "../../components/HomeItem"
+import HomeItem from "./components/Item"
 import DatePicker from "../../components/DatePicker"
 
 import { Schedule } from "../../models/Schedule/types"

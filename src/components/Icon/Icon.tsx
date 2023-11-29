@@ -16,18 +16,18 @@ type IconProps = {
 	size?: number
 }
 
-const Icon: React.FC<IconProps> = ({ color, name, size = 20 }) => {
+export const Icon: React.FC<IconProps> = ({ color, name, size = 20 }) => {
 	const theme = useTheme()
 	const SVGIcon = mapIcons[name]
 	return <SVGIcon color={theme.colors[color || "text"]} size={size} />
 }
-
-const mapIcons = {
-	check: CheckIcon,
+export const mapTypeProceedingsIcon = {
 	eyeslash: Eyeslash,
 	hair: HairIcon,
 	nail: NailIcon,
-	triangle: Triangle,
 }
-
-export default Icon
+export const mapIcons = {
+	check: CheckIcon,
+	triangle: Triangle,
+	...mapTypeProceedingsIcon,
+}

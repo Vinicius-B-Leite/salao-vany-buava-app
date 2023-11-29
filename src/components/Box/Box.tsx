@@ -34,7 +34,7 @@ import {
 export const Box = createBox<Theme>()
 export type BoxType = React.ComponentProps<typeof Box>
 
-type BoxPressableProps = SpacingProps<Theme> &
+export type BoxPressableProps = SpacingProps<Theme> &
 	BackgroundColorProps<Theme> &
 	OpacityProps<Theme> &
 	LayoutProps<Theme> &

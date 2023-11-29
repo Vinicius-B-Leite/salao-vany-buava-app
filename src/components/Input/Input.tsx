@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react"
 import { Pressable, TextInput, TextInputProps, View } from "react-native"
-import { BoxPressable, Box } from "../Box/Box"
-import Text from "../Text/Text"
+import { BoxPressable, Box, Text } from "@/components"
 import { useTheme } from "@shopify/restyle"
 import { Theme } from "@/theme"
 import { wrapper } from "./style"

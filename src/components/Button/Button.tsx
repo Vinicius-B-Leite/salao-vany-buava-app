@@ -1,17 +1,14 @@
 import React from "react"
 import { PressableProps } from "react-native"
-import { BoxPressable, BoxType } from "../Box/Box"
-import Text from "../Text/Text"
-import Spinner from "../Spinner/Spinner"
+import { Spinner, Text, BoxPressable, BoxPressableProps } from "@/components"
 
-type ButtonProps = PressableProps &
-	BoxType & {
-		title: string
-		isLoading?: boolean
-		disabled?: boolean
-	}
+type ButtonProps = BoxPressableProps & {
+	title: string
+	isLoading?: boolean
+	disabled?: boolean
+}
 
-const Button: React.FC<ButtonProps> = ({
+export const Button: React.FC<ButtonProps> = ({
 	title,
 	isLoading = false,
 	disabled = false,
@@ -38,5 +35,3 @@ const Button: React.FC<ButtonProps> = ({
 		</BoxPressable>
 	)
 }
-
-export default Button
