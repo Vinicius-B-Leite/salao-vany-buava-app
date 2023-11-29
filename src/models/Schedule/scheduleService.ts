@@ -35,7 +35,7 @@ export const scheduleService: ScheduleService = {
 						id: String(item.id),
 						proceedingsKeys: item.procedimento,
 						type: item.tipo,
-						hour: item.hora,
+						hour: new Date(item.hora),
 						totalValue: item.valor,
 					}
 					setShedule((oldData) => [...oldData, newData])
@@ -59,7 +59,7 @@ export const scheduleService: ScheduleService = {
 			await set(newKey, {
 				cliente: clientName,
 				data: format(date, "dd/MM/yyyy"),
-				hora: hour,
+				hora: hour.toString(),
 				tipo: type,
 				valor: totalValue,
 				id: newKey.toString().slice(60, newKey.key?.length),

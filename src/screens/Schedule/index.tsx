@@ -119,6 +119,7 @@ export default function Schedule() {
 							/>
 							{showDatePicker && (
 								<DatePicker
+									visible={showDatePicker}
 									date={date}
 									setDate={setDate}
 									setShowDatePicker={setShowDatePicker}

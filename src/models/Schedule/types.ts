@@ -4,7 +4,7 @@ import { ProceedingsTypes } from "../Proceedings/types"
 export type Schedule = {
 	clientName: string
 	date: Date
-	hour: string
+	hour: Date
 	id: string
 	proceedingsKeys: string[]
 	type: ProceedingsTypes

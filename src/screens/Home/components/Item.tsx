@@ -17,6 +17,7 @@ import {
 	mapTypeProceedingsIcon,
 	Text,
 } from "@/components"
+import { format } from "date-fns"
 
 const { height } = Dimensions.get("screen")
 
@@ -27,6 +28,7 @@ type HomeItemProps = {
 export default function HomeItem({ data }: HomeItemProps) {
 	const [proceedings, setProceedings] = useState<string[]>([])
 	const navigation = useNavigation()
+	console.log(data.hour)
 
 	const mapTranslateIcon: Record<
 		"cabelo" | "unha" | "cilios",
@@ -63,13 +65,14 @@ export default function HomeItem({ data }: HomeItemProps) {
 		const newDate = new Date(data.date)
 
 		const [day, month, year] = data.date.toString().split("/")
-		const [hour, minute] = data.hour.split(":")
+		const hour = data.hour.getHours()
+		const minutes = data.hour.getMinutes()
 
 		newDate.setMonth(Number(month))
 		newDate.setFullYear(Number(year))
 		newDate.setDate(Number(day))
 		newDate.setHours(Number(hour))
-		newDate.setMinutes(Number(minute))
+		newDate.setMinutes(Number(minutes))
 
 		navigation.navigate("ScheduleToday", {
 			screen: "UpdateSchedule",
@@ -90,7 +93,7 @@ export default function HomeItem({ data }: HomeItemProps) {
 					<Text variant="pRegular" mb="s2">
 						{data.clientName}
 					</Text>
-					<Text variant="pMinimun">{data.hour}</Text>
+					<Text variant="pMinimun">{format(data.hour, "HH:mm")}</Text>
 				</Box>
 				<Box flex={0.25}>
 					<FlatList
