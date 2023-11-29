@@ -14,7 +14,8 @@ export type Schedule = {
 export type ScheduleService = {
 	getScheduleRealtTime: (
 		date: Date,
-		setShedule: React.Dispatch<React.SetStateAction<Schedule[]>>
+		setShedule: React.Dispatch<React.SetStateAction<Schedule[]>>,
+		setLoading: React.Dispatch<React.SetStateAction<boolean>>
 	) => Unsubscribe
 	createSchedule: (data: Omit<Schedule, "id">) => Promise<void>
 	updateSchedule: (newDate: Schedule) => Promise<void>

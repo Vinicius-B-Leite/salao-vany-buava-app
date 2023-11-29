@@ -30,12 +30,12 @@ const theme = createTheme({
 			fontWeight: "bold",
 		},
 		tRegular: {
-			lineHeight: 20,
+			lineHeight: 27,
 			fontSize: 24,
 			color: "text",
 		},
 		tMax: {
-			lineHeight: 32,
+			lineHeight: 41,
 			fontSize: 38,
 			color: "text",
 		},

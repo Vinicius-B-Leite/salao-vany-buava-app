@@ -14,13 +14,14 @@ import { format } from "date-fns"
 import { localNotification } from "../../service/localNotification/localNotificatoinService"
 
 export const scheduleService: ScheduleService = {
-	getScheduleRealtTime: (date: Date, setShedule) => {
+	getScheduleRealtTime: (date: Date, setShedule, setLoading) => {
 		const dbQuery = query(
 			dbRef,
 			orderByChild("data"),
 			equalTo(format(date, "dd/MM/yyyy"))
 		)
 		return onValue(dbQuery, (snapshot) => {
+			setLoading(true)
 			if (snapshot.exists()) {
 				setShedule([])
 
@@ -39,8 +40,9 @@ export const scheduleService: ScheduleService = {
 					}
 					setShedule((oldData) => [...oldData, newData])
 				})
-				// setShedule((oldP) => oldP.sort((a, b) => (a.hour > b.hour ? true : -1)))
+				setShedule((oldP) => oldP.sort((a, b) => (a.hour > b.hour ? 1 : -1)))
 			} else setShedule([])
+			setLoading(false)
 		})
 	},
 	createSchedule: async ({
@@ -60,7 +62,7 @@ export const scheduleService: ScheduleService = {
 				hora: hour,
 				tipo: type,
 				valor: totalValue,
-				id: newKey.toString().slice(60, newKey.key.length),
+				id: newKey.toString().slice(60, newKey.key?.length),
 				procedimento: proceedingsKeys,
 			})
 

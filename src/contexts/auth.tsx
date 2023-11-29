@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState } from "react"
 import { signInWithEmailAndPassword, getAuth, AuthErrorCodes } from "firebase/auth"
 import { app, auth } from "../service/firebase"
-import AsyncStorage from "@react-native-async-storage/async-storage"
+
 import { User } from "../models/User/types"
 import {
 	emailErros,
@@ -19,6 +19,7 @@ export type AuthContextProps = {
 		password: string
 	}
 	loadingLogin: boolean
+	loadingGetUser: boolean
 }
 export const AuthContext = createContext({} as AuthContextProps)
 
@@ -26,10 +27,17 @@ export default function AuthContextProvider({ children }: { children: React.Reac
 	const [user, setUser] = useState<User | null>(null)
 	const [errorLogin, setErrorLogin] = useState({ email: "", password: "" })
 	const [loadingLogin, setLoadingLogin] = useState(false)
-
+	const [loadingGetUser, setLoadingGetUser] = useState(false)
 	useEffect(() => {
-		userService.getStorageUser().then((user) => user && setUser(user))
+		getUser()
 	}, [])
+
+	async function getUser() {
+		setLoadingGetUser(true)
+		const userStorage = await userService.getStorageUser()
+		setUser(userStorage)
+		setLoadingGetUser(false)
+	}
 
 	async function login(email: string, password: string) {
 		setLoadingLogin(true)
@@ -57,7 +65,7 @@ export default function AuthContextProvider({ children }: { children: React.Reac
 
 	return (
 		<AuthContext.Provider
-			value={{ isLogged: !!user, login, errorLogin, loadingLogin }}>
+			value={{ isLogged: !!user, login, errorLogin, loadingLogin, loadingGetUser }}>
 			{children}
 		</AuthContext.Provider>
 	)

@@ -7,7 +7,7 @@ type ContainerProps = BoxType & {
 	children: React.ReactNode
 }
 
-const Container: React.FC<ContainerProps> = ({
+export const Container: React.FC<ContainerProps> = ({
 	children,
 	scrollEnabled = false,
 	...rest
@@ -23,5 +23,3 @@ const Container: React.FC<ContainerProps> = ({
 		</Box>
 	)
 }
-
-export default Container

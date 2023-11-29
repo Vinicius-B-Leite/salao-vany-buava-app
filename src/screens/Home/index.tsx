@@ -1,87 +1,60 @@
 import React, { useEffect, useState } from "react"
 
-import { FlatList, Text, TouchableOpacity } from "react-native"
-import * as S from "./styles"
+import { FlatList } from "react-native"
 
 import HomeItem from "../../components/HomeItem"
 import DatePicker from "../../components/DatePicker"
 
-import { AntDesign } from "@expo/vector-icons"
-import { Entypo } from "@expo/vector-icons"
-
-import { DrawerActions, NavigationProp, useNavigation } from "@react-navigation/native"
 import { Schedule } from "../../models/Schedule/types"
 import { scheduleService } from "../../models/Schedule/scheduleService"
-import { daysOfWeek } from "../../utlis/daysOfWeek"
-import { months } from "../../utlis/months"
+import Header from "./components/Header"
+import DateSelected from "./components/DateSelected"
+
+import { Spinner, Container, Text } from "@/components"
 
 export default function Home() {
-	const navigation = useNavigation()
-
 	const [data, setData] = useState<Schedule[]>([])
 	const [date, setDate] = useState(new Date())
 	const [showDatePicker, setShowDatePicker] = useState(false)
+	const [loading, setLoading] = useState(false)
 
 	useEffect(() => {
-		const unsub = scheduleService.getScheduleRealtTime(date, setData)
+		const unsub = scheduleService.getScheduleRealtTime(date, setData, setLoading)
 
 		return unsub
 	}, [date])
 
-	function getWeekDayName() {
-		return daysOfWeek[date.getDay()]
-	}
-
-	function getMothName() {
-		return months[date.getMonth()]
-	}
 	return (
 		<>
-			<S.Header>
-				<TouchableOpacity
-					onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
-					<Entypo name="menu" size={28} color="#fff" />
-				</TouchableOpacity>
-				<S.Title>Atendimentos de hoje</S.Title>
-			</S.Header>
-			<S.Container>
-				<S.Welcome>Olá, Vanny!</S.Welcome>
-				<S.DataContainer>
-					<TouchableOpacity onPress={() => setShowDatePicker(!showDatePicker)}>
-						<AntDesign name="calendar" size={24} color="#fff" />
-					</TouchableOpacity>
-					<S.Date>
-						{getWeekDayName()}, {date.getDate()} de {getMothName()} de{" "}
-						{date.getFullYear()}
-					</S.Date>
-				</S.DataContainer>
+			<Header />
+			<Container>
+				<Text variant="tMax" mb="s16">
+					Olá, Vanny!
+				</Text>
+				<DateSelected date={date} openCalendar={() => setShowDatePicker(true)} />
 
-				{data.length > 0 ? (
+				{loading ? (
+					<Spinner size={40} />
+				) : (
 					<FlatList
-						style={{ marginTop: "7%" }}
 						data={data}
 						keyExtractor={(item) => item.id}
 						renderItem={({ item }) => <HomeItem data={item} />}
+						ListEmptyComponent={() => (
+							<Text variant="pRegular" color="alert">
+								Não teve clientes agendadas este dia
+							</Text>
+						)}
 					/>
-				) : (
-					<Text
-						style={{
-							color: "#fc1303",
-							textAlign: "center",
-							marginTop: "10%",
-						}}>
-						Não teve clientes agendadas este dia
-					</Text>
 				)}
 
-				{showDatePicker && (
-					<DatePicker
-						date={date}
-						setDate={setDate}
-						setShowDatePicker={setShowDatePicker}
-					/>
-				)}
-			</S.Container>
+				<DatePicker
+					visible={showDatePicker}
+					date={date}
+					setDate={setDate}
+					setShowDatePicker={setShowDatePicker}
+				/>
+			</Container>
 		</>
 	)
 }

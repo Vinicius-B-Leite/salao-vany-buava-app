@@ -10,9 +10,11 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { LoginForm, loginSchema } from "./loginSchema"
 import { FormInput } from "@/components/Form/FormInput"
 import { FormPasswordInput } from "@/components/Form/FormPasswordInput"
+import Spinner from "@/components/Spinner/Spinner"
+import { Box } from "@/components/Box/Box"
 
 export default function Login() {
-	const { loadingLogin, login, errorLogin } = useContext(AuthContext)
+	const { loadingLogin, login, errorLogin, loadingGetUser } = useContext(AuthContext)
 	const { control, formState, handleSubmit } = useForm<LoginForm>({
 		resolver: zodResolver(loginSchema),
 		defaultValues: {
@@ -24,6 +26,14 @@ export default function Login() {
 
 	const handleLogin = (data: LoginForm) => {
 		login(data.email, data.password)
+	}
+
+	if (loadingGetUser) {
+		return (
+			<Container justifyContent="center" alignItems="center">
+				<Spinner size={50} />
+			</Container>
+		)
 	}
 	return (
 		<Container scrollEnabled alignItems="center">
