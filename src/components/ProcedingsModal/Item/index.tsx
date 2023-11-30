@@ -7,65 +7,32 @@ import { ref, remove } from "firebase/database"
 import { db } from "../../../service/firebase"
 import { Alert } from "react-native"
 import { Proceedings, ProceedingsTypes } from "../../../models/Proceedings/types"
+import { useTheme } from "@shopify/restyle"
+import { BoxPressable } from "@/components"
+import { proceedingsService } from "@/models/Proceedings/proceedingsService"
 
 type ItemProps = {
 	proceeding: Proceedings
-	setSelectedProceedings: React.Dispatch<React.SetStateAction<Proceedings[]>>
-	selectedProceedings: Proceedings[]
 	type: ProceedingsTypes
-	setProceedings: React.Dispatch<React.SetStateAction<Proceedings[]>>
+	isSelected: boolean
+	handleSelectProceeding: (proceedgins: Proceedings) => void
+	handleDelete: (proceedgins: Proceedings) => void
 }
 export default function Item({
 	proceeding,
-	setSelectedProceedings,
-	selectedProceedings,
 	type,
-	setProceedings,
+	handleSelectProceeding,
+	isSelected,
+	handleDelete,
 }: ItemProps) {
-	const [isSelected, setIsSelected] = useState(false)
-
-	useEffect(() => {
-		setIsSelected(selectedProceedings.indexOf(proceeding) > -1 ? true : false)
-	}, [selectedProceedings])
-
-	function updateSelectedStatus() {
-		setSelectedProceedings((oldP) => {
-			if (selectedProceedings.indexOf(proceeding) > -1) {
-				let index = selectedProceedings.indexOf(proceeding)
-				let array = [...oldP]
-				array.splice(index, 1)
-				return [...array]
-			}
-
-			let newData = proceeding
-
-			newData["selected"] = true
-			return [...oldP, newData]
-		})
-	}
-
+	const { colors } = useTheme()
 	function deleteItem() {
 		Alert.alert("Atenção", "Deseja excluir o procedimento " + proceeding.name + "?", [
 			{
 				text: "Confirmar",
-				onPress: () => {
-					remove(ref(db, `procedimentos/${type}/${proceeding.id}`)).then(() => {
-						setProceedings((oldP) => {
-							let array = [...oldP]
-							let index = array.indexOf(proceeding)
-							array.splice(index, 1)
-							return [...array]
-						})
-
-						if (isSelected) {
-							setSelectedProceedings((oldP) => {
-								let array = [...oldP]
-								let index = array.indexOf(proceeding)
-								array.splice(index, 1)
-								return array
-							})
-						}
-					})
+				onPress: async () => {
+					await proceedingsService.deleteProceedings(type, proceeding.id)
+					handleDelete(proceeding)
 				},
 				style: "default",
 			},
@@ -77,15 +44,22 @@ export default function Item({
 		])
 	}
 	return (
-		<S.Container
-			onPress={() => updateSelectedStatus()}
+		<BoxPressable
+			bg="contrastSecond"
+			flexDirection="row"
+			borderRadius="s5"
+			justifyContent="space-between"
+			alignItems="center"
+			padding="s16"
+			mb="s16"
+			onPress={() => handleSelectProceeding(proceeding)}
 			onLongPress={() => deleteItem()}>
 			<S.Proceeding>{proceeding.name}</S.Proceeding>
 			<AntDesign
 				name="checkcircle"
 				size={24}
-				color={isSelected ? "#fff" : "#000"}
+				color={isSelected ? colors.text : colors.bg}
 			/>
-		</S.Container>
+		</BoxPressable>
 	)
 }

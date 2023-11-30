@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 
 import {
 	ActivityIndicator,
@@ -18,6 +18,8 @@ import { child, get, ref } from "firebase/database"
 import { db } from "../../service/firebase"
 import { useFocusEffect } from "@react-navigation/native"
 import { Proceedings, ProceedingsTypes } from "../../models/Proceedings/types"
+import { proceedingsService } from "@/models/Proceedings/proceedingsService"
+import { Box, Input, Spinner } from "@/components"
 
 type ProcedingsModalProps = {
 	setProccedingsModalVisible: React.Dispatch<React.SetStateAction<boolean>>
@@ -25,7 +27,6 @@ type ProcedingsModalProps = {
 	type: ProceedingsTypes
 	selectedProceedings: Proceedings[]
 	setSelectedProceedings: React.Dispatch<React.SetStateAction<Proceedings[]>>
-	proceedingsKeys: string[]
 }
 
 export default function ProcedingsModal({
@@ -34,68 +35,61 @@ export default function ProcedingsModal({
 	type,
 	selectedProceedings,
 	setSelectedProceedings,
-	proceedingsKeys,
 }: ProcedingsModalProps) {
 	const [searchInput, setSearchInput] = useState("")
 	const searchInputRef = useRef<TextInput>(null)
-	const [filterProceedings, setFilterProceedings] = useState<Proceedings[]>([])
 	const [proceedings, setProceedings] = useState<Proceedings[]>([])
 	const [loading, setLoading] = useState(true)
 
-	function getProceedings() {
-		get(child(ref(db), "procedimentos/" + type))
-			.then((snapshot) => {
-				if (!snapshot.exists()) return
-				setProceedings([])
-				let data: Proceedings = snapshot.val()
-
-				let keys = Object.keys(data)
-
-				console.log(keys)
-				keys.forEach((k) => {
-					let proceedginsDB = {} as Proceedings
-					proceedginsDB["id"] = k
-					proceedginsDB["name"] = data[k].nome
-					proceedginsDB["selected"] = selectedProceedings
-						.map((item) => item.id)
-						.includes(k)
-						? true
-						: false
-
-					if (proceedingsKeys?.includes(proceedginsDB.id)) {
-						proceedginsDB["selected"] = true
-						setSelectedProceedings((oldValue) => [...oldValue, proceedginsDB])
-					}
-					if (
-						selectedProceedings
-							.map((item) => item.id)
-							.includes(proceedginsDB.id)
-					) {
-						setSelectedProceedings((oldP) => [...oldP, proceedginsDB])
-					}
-
-					setProceedings((oldProceedings) => [...oldProceedings, proceedginsDB])
-				})
-			})
-			.finally(() => setLoading(false))
+	async function getProceedings() {
+		setLoading(true)
+		const proceedingsResponse = await proceedingsService.getProceedings(type)
+		if (proceedingsResponse) {
+			setProceedings(proceedingsResponse)
+		}
+		setLoading(false)
 	}
 
 	useEffect(() => {
 		setSelectedProceedings([])
 	}, [type])
 
-	function searchIconClick() {
-		if (!searchInputRef.current.isFocused()) searchInputRef.current.focus()
-	}
-
-	function filterSearch(txt: string) {
-		setSearchInput(txt)
+	const filterProceedings = useMemo(() => {
 		let proceedingsFilter = proceedings.filter((item) => {
-			return item.name.includes(txt.toLowerCase())
+			return item.name.includes(searchInput.toLowerCase())
 		})
-		setFilterProceedings(proceedingsFilter)
-	}
 
+		return proceedingsFilter
+	}, [])
+
+	const handleSelectProceeding = (proceedingsItem: Proceedings) => {
+		const index = selectedProceedings.findIndex((v) => v.id === proceedingsItem.id)
+		const wasAlreadySelected = index > -1
+
+		if (wasAlreadySelected) {
+			const newProceedingsSelected = selectedProceedings.splice(index, 1)
+			setSelectedProceedings([...newProceedingsSelected])
+			return
+		}
+
+		setSelectedProceedings([...selectedProceedings, proceedingsItem])
+	}
+	const handleDelete = (proceedingsItem: Proceedings) => {
+		const index = proceedings.findIndex((v) => v.id === proceedingsItem.id)
+		setProceedings((oldValue) => {
+			oldValue.splice(index, 1)
+			return [...oldValue]
+		})
+
+		if (selectedProceedings.includes(proceedingsItem)) {
+			const indexInSelectedProceedings =
+				selectedProceedings.indexOf(proceedingsItem)
+			setSelectedProceedings((oldValue) => {
+				oldValue.splice(indexInSelectedProceedings, 1)
+				return [...oldValue]
+			})
+		}
+	}
 	return (
 		<Modal
 			animationType="slide"
@@ -103,50 +97,64 @@ export default function ProcedingsModal({
 			visible={proceddingsModalVisible}
 			onShow={getProceedings}>
 			{loading ? (
-				<View
-					style={{
-						flex: 1,
-						justifyContent: "center",
-						alignItems: "center",
-						backgroundColor: "#0C031E",
-					}}>
-					<ActivityIndicator size={50} color="#54407C" />
-				</View>
+				<Box bg="bg" justifyContent="center" alignItems="center" flex={1}>
+					<Spinner />
+				</Box>
 			) : (
 				<S.Container>
-					<S.Header>
+					<Box
+						flexDirection="row"
+						alignItems="center"
+						justifyContent="space-between">
 						<TouchableOpacity
 							onPress={() => setProccedingsModalVisible(false)}>
 							<Ionicons name="arrow-back" size={30} color="#fff" />
 						</TouchableOpacity>
 
-						<S.InputContainer>
-							<TouchableOpacity onPress={() => searchIconClick()}>
+						<Box
+							bg="contrastSecond"
+							flex={0.9}
+							flexDirection="row-reverse"
+							alignItems="center"
+							borderRadius="s5"
+							paddingHorizontal="s12">
+							<TouchableOpacity
+								onPress={() => searchInputRef?.current?.focus()}>
 								<Ionicons name="search" size={24} color="#fff" />
 							</TouchableOpacity>
 
-							<S.Input
+							<Input
 								ref={searchInputRef}
 								value={searchInput}
-								onChangeText={filterSearch}
+								onChangeText={setSearchInput}
+								textAlign="right"
+								boxProps={{
+									mt: undefined,
+									borderWidth: undefined,
+								}}
 							/>
-						</S.InputContainer>
-					</S.Header>
+						</Box>
+					</Box>
 
-					<FlatList
-						style={{ marginTop: "15%" }}
-						data={searchInput ? filterProceedings : proceedings}
-						keyExtractor={(item) => item.id.toString()}
-						renderItem={({ item }) => (
-							<Item
-								proceeding={item}
-								setSelectedProceedings={setSelectedProceedings}
-								selectedProceedings={selectedProceedings}
-								type={type}
-								setProceedings={setProceedings}
-							/>
-						)}
-					/>
+					<Box mt="s30">
+						<FlatList
+							data={searchInput ? filterProceedings : proceedings}
+							keyExtractor={(item) => item.id.toString()}
+							renderItem={({ item }) => (
+								<Item
+									proceeding={item}
+									type={type}
+									handleSelectProceeding={handleSelectProceeding}
+									isSelected={
+										selectedProceedings.findIndex(
+											(v) => v.id === item.id
+										) > -1
+									}
+									handleDelete={handleDelete}
+								/>
+							)}
+						/>
+					</Box>
 				</S.Container>
 			)}
 		</Modal>

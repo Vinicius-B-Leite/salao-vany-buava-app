@@ -2,28 +2,24 @@ import React from "react"
 import DateTimePicker, {
 	DateTimePickerEvent,
 } from "@react-native-community/datetimepicker"
+import { HourPickerProps } from "../HourPicker"
 
-type DatePickerProps = {
-	date: Date
-	setDate: (oldDate: Date) => void
-	setShowDatePicker: (oldShow: boolean) => void
-	visible: boolean
-}
+type DatePickerProps = HourPickerProps
 export default function DatePicker({
-	date,
-	setDate,
-	setShowDatePicker,
+	value,
+	onChangeValue,
+	setShow,
 	visible,
 }: DatePickerProps) {
 	function onChange(event: DateTimePickerEvent, selectedDate?: Date) {
 		if (!selectedDate) return
 
 		const currentDate = selectedDate
-		setShowDatePicker(false)
-		setDate(currentDate)
+		setShow(false)
+		onChangeValue(currentDate)
 	}
 
 	if (!visible) return null
 
-	return <DateTimePicker value={date} mode="date" onChange={onChange} />
+	return <DateTimePicker value={value} mode="date" onChange={onChange} />
 }

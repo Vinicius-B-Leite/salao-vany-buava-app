@@ -4,20 +4,25 @@ import RNDateTimePicker, {
 import React from "react"
 import { View } from "react-native"
 
-type HourPickerProps = {
-	hour: Date
-	setHour: (oldDate: Date) => void
-	setShowHourPicker: (oldShow: boolean) => void
+export type HourPickerProps = {
+	value: Date
+	onChangeValue: (oldDate: Date) => void
+	setShow: (oldShow: boolean) => void
+	visible: boolean
 }
 export default function HourPicker({
-	hour,
-	setHour,
-	setShowHourPicker,
+	visible,
+	value,
+	onChangeValue,
+	setShow,
 }: HourPickerProps) {
-	function onChange(event: DateTimePickerEvent, selectedDate: Date) {
+	function onChange(event: DateTimePickerEvent, selectedDate?: Date) {
+		if (!selectedDate) return
 		const currentDate = selectedDate
-		setShowHourPicker(false)
-		setHour(currentDate)
+		setShow(false)
+		onChangeValue(currentDate)
 	}
-	return <RNDateTimePicker value={hour} mode="time" onChange={onChange} />
+
+	if (!visible) return null
+	return <RNDateTimePicker value={value} mode="time" onChange={onChange} />
 }

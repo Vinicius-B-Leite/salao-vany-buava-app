@@ -3,7 +3,6 @@ import React, { useState } from "react"
 import { ActivityIndicator } from "react-native"
 import * as S from "./styles"
 
-import { Error } from "../Schedule/styles"
 import TypePicker from "../../components/TypePicker"
 
 import { proceedingsService } from "../../models/Proceedings/proceedingsService"
@@ -35,7 +34,7 @@ export default function NewProceedings() {
 
 	return (
 		<S.Container>
-			{errorMessage && <Error>{errorMessage}</Error>}
+			{/* {errorMessage && <Error>{errorMessage}</Error>} */}
 			<S.Input
 				placeholder="Nome do procedimento"
 				value={proceedingsName}

@@ -1,5 +1,5 @@
-import { child, get, push, ref, set } from "firebase/database"
-import { proceedingsServiceType } from "./types"
+import { child, get, push, ref, remove, set } from "firebase/database"
+import { Proceedings, ProceedingsResponse, proceedingsServiceType } from "./types"
 import { db } from "../../service/firebase"
 
 export const proceedingsService: proceedingsServiceType = {
@@ -18,5 +18,30 @@ export const proceedingsService: proceedingsServiceType = {
 		)
 
 		return response.exists() ? response.val() : null
+	},
+	getProceedings: async (type) => {
+		const proceedingsRef = child(ref(db), "procedimentos/" + type)
+		const snapshot = await get(proceedingsRef)
+
+		if (!snapshot.exists()) return null
+
+		const proceedingsData = snapshot.val() as ProceedingsResponse
+		const proceedingsKeys = Object.keys(proceedingsData)
+		let proceedings: Proceedings[] = []
+
+		Object.values(proceedingsData).forEach((item, index) => {
+			const data: Proceedings = {
+				id: proceedingsKeys[index],
+				name: item.nome,
+				type: type,
+			}
+
+			proceedings.push(data)
+		})
+
+		return proceedings
+	},
+	deleteProceedings: async (type, id) => {
+		await remove(ref(db, `procedimentos/${type}/${id}`))
 	},
 }
