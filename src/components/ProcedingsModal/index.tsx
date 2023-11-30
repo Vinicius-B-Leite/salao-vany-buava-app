@@ -25,8 +25,8 @@ type ProcedingsModalProps = {
 	setProccedingsModalVisible: React.Dispatch<React.SetStateAction<boolean>>
 	proceddingsModalVisible: boolean
 	type: ProceedingsTypes
-	selectedProceedings: Proceedings[]
-	setSelectedProceedings: React.Dispatch<React.SetStateAction<Proceedings[]>>
+	selectedProceedings: string[]
+	setSelectedProceedings: React.Dispatch<React.SetStateAction<string[]>>
 }
 
 export default function ProcedingsModal({
@@ -62,17 +62,19 @@ export default function ProcedingsModal({
 		return proceedingsFilter
 	}, [])
 
-	const handleSelectProceeding = (proceedingsItem: Proceedings) => {
-		const index = selectedProceedings.findIndex((v) => v.id === proceedingsItem.id)
+	const handleSelectProceeding = (proceedingsKey: string) => {
+		const index = selectedProceedings.indexOf(proceedingsKey)
 		const wasAlreadySelected = index > -1
 
 		if (wasAlreadySelected) {
-			const newProceedingsSelected = selectedProceedings.splice(index, 1)
-			setSelectedProceedings([...newProceedingsSelected])
+			setSelectedProceedings((oldValue) => {
+				oldValue.splice(index, 1)
+				return [...oldValue]
+			})
 			return
 		}
 
-		setSelectedProceedings([...selectedProceedings, proceedingsItem])
+		setSelectedProceedings([...selectedProceedings, proceedingsKey])
 	}
 	const handleDelete = (proceedingsItem: Proceedings) => {
 		const index = proceedings.findIndex((v) => v.id === proceedingsItem.id)
@@ -81,11 +83,12 @@ export default function ProcedingsModal({
 			return [...oldValue]
 		})
 
-		if (selectedProceedings.includes(proceedingsItem)) {
-			const indexInSelectedProceedings =
-				selectedProceedings.indexOf(proceedingsItem)
+		if (selectedProceedings.includes(proceedingsItem.id)) {
+			const indexInSelectedProceedings = selectedProceedings.indexOf(
+				proceedingsItem.id
+			)
 			setSelectedProceedings((oldValue) => {
-				oldValue.splice(indexInSelectedProceedings, 1)
+				oldValue.slice(indexInSelectedProceedings, 1)
 				return [...oldValue]
 			})
 		}
@@ -144,12 +147,10 @@ export default function ProcedingsModal({
 								<Item
 									proceeding={item}
 									type={type}
-									handleSelectProceeding={handleSelectProceeding}
-									isSelected={
-										selectedProceedings.findIndex(
-											(v) => v.id === item.id
-										) > -1
+									handleSelectProceeding={(p) =>
+										handleSelectProceeding(p.id)
 									}
+									isSelected={selectedProceedings.indexOf(item.id) > -1}
 									handleDelete={handleDelete}
 								/>
 							)}

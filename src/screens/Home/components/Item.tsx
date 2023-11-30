@@ -28,7 +28,6 @@ type HomeItemProps = {
 export default function HomeItem({ data }: HomeItemProps) {
 	const [proceedings, setProceedings] = useState<string[]>([])
 	const navigation = useNavigation()
-	console.log(data.hour)
 
 	const mapTranslateIcon: Record<
 		"cabelo" | "unha" | "cilios",
@@ -41,6 +40,7 @@ export default function HomeItem({ data }: HomeItemProps) {
 	useEffect(() => {
 		function getProceedingsName() {
 			let p = data?.proceedingsKeys
+
 			setProceedings([])
 			p?.forEach(async (item) => {
 				const proceedings = await proceedingsService.getSingleProceeding(
@@ -65,19 +65,12 @@ export default function HomeItem({ data }: HomeItemProps) {
 		const newDate = new Date(data.date)
 
 		const [day, month, year] = data.date.toString().split("/")
-		const hour = data.hour.getHours()
-		const minutes = data.hour.getMinutes()
 
 		newDate.setMonth(Number(month))
 		newDate.setFullYear(Number(year))
 		newDate.setDate(Number(day))
-		newDate.setHours(Number(hour))
-		newDate.setMinutes(Number(minutes))
 
-		navigation.navigate("ScheduleToday", {
-			screen: "UpdateSchedule",
-			params: { data: { ...data, date: newDate } },
-		})
+		navigation.navigate("ScheduleClient", { data: { ...data, date: newDate } })
 	}
 	return (
 		<BoxPressable

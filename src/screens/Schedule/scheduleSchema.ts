@@ -10,9 +10,7 @@ export const scheduleSchema = z.object({
 	totalValue: z.string().min(1, "Mínimo de 1 número"),
 	date: z.date(),
 	hour: z.date(),
-	proceedgins: z
-		.array(z.custom<Proceedings>())
-		.nonempty("Selecione ao menos um procedimento"),
+	proceedgins: z.array(z.string()).nonempty("Selecione ao menos um procedimento"),
 })
 
 export type ScheduleForm = z.infer<typeof scheduleSchema>

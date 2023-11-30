@@ -49,10 +49,10 @@ export default function Home() {
 				)}
 
 				<DatePicker
+					value={date}
 					visible={showDatePicker}
-					date={date}
-					setDate={setDate}
-					setShowDatePicker={setShowDatePicker}
+					onChangeValue={setDate}
+					setShow={setShowDatePicker}
 				/>
 			</Container>
 		</>

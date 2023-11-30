@@ -16,17 +16,23 @@ import { Controller, useForm } from "react-hook-form"
 import { ScheduleForm, scheduleSchema } from "./scheduleSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Row from "./components/Row"
+import { DrawerScreenProps } from "@react-navigation/drawer"
+import { AppRouteParamsList } from "@/routes/app.route"
 
-export default function Schedule() {
+type ScreenProps = DrawerScreenProps<AppRouteParamsList, "ScheduleClient">
+export default function Schedule({ route, navigation }: ScreenProps) {
+	const routeParams = route?.params?.data
+	console.log(routeParams?.date)
+
 	const { control, formState, handleSubmit, getValues } = useForm<ScheduleForm>({
 		resolver: zodResolver(scheduleSchema),
 		defaultValues: {
-			clientName: "",
-			date: new Date(),
-			hour: new Date(),
-			proceedgins: [],
-			totalValue: "",
-			type: "cabelo",
+			clientName: routeParams?.clientName || "",
+			date: routeParams?.date ? new Date(routeParams?.date) : new Date(),
+			hour: routeParams?.hour ? new Date(routeParams?.hour) : new Date(),
+			proceedgins: routeParams?.proceedingsKeys || [],
+			totalValue: routeParams?.totalValue.toString() || "",
+			type: routeParams?.type || "cabelo",
 		},
 		mode: "onChange",
 	})
@@ -40,15 +46,17 @@ export default function Schedule() {
 		try {
 			const { clientName, date, hour, proceedgins, totalValue, type } = data
 
-			let keysSelected = proceedgins.map((item) => item.id)
-			await scheduleService.createSchedule({
-				clientName,
-				date,
-				hour,
-				proceedingsKeys: keysSelected,
-				totalValue: Number(totalValue),
-				type: type,
-			})
+			await scheduleService.createSchedule(
+				{
+					clientName,
+					date,
+					hour,
+					proceedingsKeys: proceedgins,
+					totalValue: Number(totalValue),
+					type: type,
+				},
+				routeParams?.id
+			)
 		} catch (error) {
 			console.log(`submit - Schedule (Screen) - line 70 ${error}`)
 		} finally {

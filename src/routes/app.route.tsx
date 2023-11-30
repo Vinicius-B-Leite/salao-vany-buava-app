@@ -14,10 +14,13 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import UpdateProcedings from "../screens/UpdateProcedings"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import AppHomeStack, { AppHomeStackParamslist } from "./appHomeStack"
+import { Schedule as ScheduleType } from "@/models/Schedule/types"
 
 export type AppRouteParamsList = {
 	ScheduleToday: NavigatorScreenParams<AppHomeStackParamslist>
-	ScheduleClient: undefined
+	ScheduleClient: {
+		data?: ScheduleType
+	}
 	NewProceedings: undefined
 }
 const Drawer = createDrawerNavigator<AppRouteParamsList>()

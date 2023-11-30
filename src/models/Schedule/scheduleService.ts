@@ -26,18 +26,20 @@ export const scheduleService: ScheduleService = {
 				setShedule([])
 
 				let d = snapshot.val()
-				let data = Object.values(d).map((i) => i)
+				let data = Object.values(d)
+				const scheduleKeys = Object.keys(d)
 
-				data.forEach((item: any) => {
+				data.forEach((item: any, index) => {
 					let newData: Schedule = {
 						clientName: item.cliente,
 						date: item.data,
-						id: String(item.id),
+						id: scheduleKeys[index],
 						proceedingsKeys: item.procedimento,
 						type: item.tipo,
 						hour: new Date(item.hora),
 						totalValue: item.valor,
 					}
+
 					setShedule((oldData) => [...oldData, newData])
 				})
 				setShedule((oldP) => oldP.sort((a, b) => (a.hour > b.hour ? 1 : -1)))
@@ -45,16 +47,12 @@ export const scheduleService: ScheduleService = {
 			setLoading(false)
 		})
 	},
-	createSchedule: async ({
-		clientName,
-		date,
-		hour,
-		totalValue,
-		proceedingsKeys,
-		type,
-	}) => {
+	createSchedule: async (
+		{ clientName, date, hour, totalValue, proceedingsKeys, type },
+		key
+	) => {
 		try {
-			let newKey = push(dbRef)
+			let newKey = key ? ref(db, `agenda/${key}`) : push(dbRef)
 
 			await set(newKey, {
 				cliente: clientName,
