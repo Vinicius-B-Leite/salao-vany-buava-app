@@ -11,7 +11,7 @@ import Schedule from "../screens/Schedule"
 import CustomDrawer from "../components/CustomDrawer"
 import NewProceedings from "../screens/NewProceedings"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import UpdateProcedings from "../screens/UpdateProcedings"
+
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import AppHomeStack, { AppHomeStackParamslist } from "./appHomeStack"
 import { Schedule as ScheduleType } from "@/models/Schedule/types"
@@ -33,13 +33,27 @@ export default function AppRoute() {
 				screenOptions={{
 					...drawerStyle,
 					unmountOnBlur: true,
-				}}>
+				}}
+				detachInactiveScreens={false}>
 				<Drawer.Screen
 					name="ScheduleToday"
 					component={AppHomeStack}
 					options={{ headerShown: false }}
 				/>
-				<Drawer.Screen name="ScheduleClient" component={Schedule} />
+				<Drawer.Screen
+					name="ScheduleClient"
+					component={Schedule}
+					listeners={({ navigation, route }) => ({
+						drawerItemPress: ({ preventDefault }) => {
+							preventDefault()
+							if (route.name === "ScheduleClient") {
+								navigation.navigate("ScheduleClient", {
+									params: { data: undefined },
+								})
+							}
+						},
+					})}
+				/>
 				<Drawer.Screen name="NewProceedings" component={NewProceedings} />
 			</Drawer.Navigator>
 		</NavigationContainer>
