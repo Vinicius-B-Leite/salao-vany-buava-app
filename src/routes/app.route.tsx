@@ -38,11 +38,15 @@ export default function AppRoute() {
 				<Drawer.Screen
 					name="ScheduleToday"
 					component={AppHomeStack}
-					options={{ headerShown: false }}
+					options={{ headerShown: false, drawerLabel: "Atendimentos" }}
 				/>
 				<Drawer.Screen
 					name="ScheduleClient"
 					component={Schedule}
+					options={{
+						drawerLabel: "Agendar Cliente",
+						headerTitle: "Agendar Cliente",
+					}}
 					listeners={({ navigation, route }) => ({
 						drawerItemPress: ({ preventDefault }) => {
 							preventDefault()
@@ -54,7 +58,14 @@ export default function AppRoute() {
 						},
 					})}
 				/>
-				<Drawer.Screen name="NewProceedings" component={NewProceedings} />
+				<Drawer.Screen
+					name="NewProceedings"
+					component={NewProceedings}
+					options={{
+						drawerLabel: "Criar procedimento",
+						headerTitle: "Criar procedimento",
+					}}
+				/>
 			</Drawer.Navigator>
 		</NavigationContainer>
 	)

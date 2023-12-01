@@ -23,7 +23,6 @@ import { AppRouteParamsList } from "@/routes/app.route"
 type ScreenProps = DrawerScreenProps<AppRouteParamsList, "ScheduleClient">
 export default function Schedule({ route, navigation }: ScreenProps) {
 	const routeParams = route?.params?.data
-	console.log(routeParams)
 
 	const { control, formState, handleSubmit, watch, getFieldState, reset } =
 		useForm<ScheduleForm>({
