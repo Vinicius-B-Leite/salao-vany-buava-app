@@ -1,28 +1,16 @@
-import React, { useEffect, useState } from "react"
-
 import { FlatList } from "react-native"
 
 import HomeItem from "./components/Item"
-import DatePicker from "../../components/DatePicker"
 
-import { Schedule } from "../../models/Schedule/types"
-import { scheduleService } from "../../models/Schedule/scheduleService"
 import Header from "./components/Header"
 import DateSelected from "./components/DateSelected"
 
-import { Spinner, Container, Text } from "@/components"
+import { Spinner, Container, Text, DatePicker } from "@/components"
+import { useHome } from "./hooks/useHome"
 
 export default function Home() {
-	const [data, setData] = useState<Schedule[]>([])
-	const [date, setDate] = useState(new Date())
-	const [showDatePicker, setShowDatePicker] = useState(false)
-	const [loading, setLoading] = useState(false)
-
-	useEffect(() => {
-		const unsub = scheduleService.getScheduleRealtTime(date, setData, setLoading)
-
-		return unsub
-	}, [date])
+	const { data, loading, onChangeDate, showDatePicker, toggleDatePicker, date } =
+		useHome()
 
 	return (
 		<>
@@ -31,7 +19,7 @@ export default function Home() {
 				<Text variant="tMax" mb="s16">
 					Olá, Vanny!
 				</Text>
-				<DateSelected date={date} openCalendar={() => setShowDatePicker(true)} />
+				<DateSelected date={date} openCalendar={toggleDatePicker} />
 
 				{loading ? (
 					<Spinner size={40} />
@@ -51,8 +39,8 @@ export default function Home() {
 				<DatePicker
 					value={date}
 					visible={showDatePicker}
-					onChangeValue={setDate}
-					setShow={setShowDatePicker}
+					onChangeValue={onChangeDate}
+					setShow={toggleDatePicker}
 				/>
 			</Container>
 		</>

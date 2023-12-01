@@ -19,4 +19,5 @@ export type ScheduleService = {
 	) => Unsubscribe
 	createSchedule: (data: Omit<Schedule, "id">) => Promise<void>
 	updateSchedule: (newDate: Schedule) => Promise<void>
+	deleteSchedule: (id: string) => Promise<void>
 }

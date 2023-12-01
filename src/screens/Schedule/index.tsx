@@ -19,6 +19,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import Row from "./components/Row"
 import { DrawerScreenProps } from "@react-navigation/drawer"
 import { AppRouteParamsList } from "@/routes/app.route"
+import useSchedule from "./useSchedule"
 
 type ScreenProps = DrawerScreenProps<AppRouteParamsList, "ScheduleClient">
 export default function Schedule({ route, navigation }: ScreenProps) {
@@ -49,25 +50,8 @@ export default function Schedule({ route, navigation }: ScreenProps) {
 			mode: "onChange",
 		})
 
-	const [proceddingsModalVisible, setProccedingsModalVisible] = useState(false)
-	const [loading, setLoading] = useState(false)
-
-	async function submit(data: ScheduleForm) {
-		setLoading(true)
-
-		try {
-			const { clientName, date, hour, proceedgins, totalValue, type } = data
-			const isUpdatading = !!routeParams
-
-			await scheduleService[isUpdatading ? "updateSchedule" : "createSchedule"]({
-				clientName,
-				date,
-				hour,
-				proceedingsKeys: proceedgins,
-				totalValue: Number(totalValue),
-				type: type,
-				id: routeParams?.id || "",
-			})
+	const { loading, proceddingsModalVisible, submit, toggleModal } = useSchedule({
+		handleReset: () => {
 			reset({
 				clientName: "",
 				date: new Date(),
@@ -76,24 +60,9 @@ export default function Schedule({ route, navigation }: ScreenProps) {
 				totalValue: "",
 				type: "cabelo",
 			})
-			navigation.reset({
-				index: 1,
-				routes: [
-					{
-						name: "ScheduleClient",
-						state: undefined,
-					},
-					{
-						name: "ScheduleToday",
-					},
-				],
-			})
-		} catch (error) {
-			console.log(`submit - Schedule (Screen) - line 70 ${error}`)
-		} finally {
-			setLoading(false)
-		}
-	}
+		},
+		routeParams,
+	})
 
 	return (
 		<Container scrollEnabled>
@@ -131,10 +100,7 @@ export default function Schedule({ route, navigation }: ScreenProps) {
 				<DateTimeInput control={control} name="hour" type="time" />
 			</Row>
 
-			<InputDropdown
-				title="Procedimentos"
-				onPress={() => setProccedingsModalVisible(true)}
-			/>
+			<InputDropdown title="Procedimentos" onPress={toggleModal} />
 			<Text color="alert">{getFieldState("proceedgins").error?.message}</Text>
 
 			<Controller
@@ -142,7 +108,7 @@ export default function Schedule({ route, navigation }: ScreenProps) {
 				name="proceedgins"
 				render={({ field }) => (
 					<ProcedingsModal
-						setProccedingsModalVisible={setProccedingsModalVisible}
+						setProccedingsModalVisible={toggleModal}
 						proceddingsModalVisible={proceddingsModalVisible}
 						type={watch().type}
 						selectedProceedings={field.value}

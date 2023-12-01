@@ -6,7 +6,7 @@ import { Entypo, Feather } from "@expo/vector-icons"
 import { Input } from "../Input/Input"
 import { format } from "date-fns"
 import { Controller, FieldValues, UseControllerProps } from "react-hook-form"
-import DatePicker from "../DatePicker"
+import { DatePicker } from "@/components"
 import HourPicker from "../HourPicker"
 
 type DateTimeInputProps = {

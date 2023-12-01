@@ -5,6 +5,7 @@ import {
 	push,
 	query,
 	ref,
+	remove,
 	set,
 	update,
 } from "firebase/database"
@@ -21,8 +22,8 @@ export const scheduleService: ScheduleService = {
 			equalTo(format(date, "dd/MM/yyyy"))
 		)
 		return onValue(dbQuery, (snapshot) => {
-			setLoading(true)
 			if (snapshot.exists()) {
+				setLoading(true)
 				setShedule([])
 
 				let d = snapshot.val()
@@ -100,5 +101,12 @@ export const scheduleService: ScheduleService = {
 			tipo: type,
 			valor: totalValue,
 		})
+	},
+	deleteSchedule: async (id) => {
+		try {
+			await remove(ref(db, "agenda/" + id))
+		} catch (error) {
+			throw error
+		}
 	},
 }

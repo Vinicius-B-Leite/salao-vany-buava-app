@@ -18,6 +18,7 @@ import {
 	Text,
 } from "@/components"
 import { format } from "date-fns"
+import { useHomeItem } from "../hooks/useHomeItem"
 
 const { height } = Dimensions.get("screen")
 
@@ -26,9 +27,8 @@ type HomeItemProps = {
 }
 
 export default function HomeItem({ data }: HomeItemProps) {
-	const [proceedings, setProceedings] = useState<string[]>([])
-	const navigation = useNavigation()
-
+	const { handleNavigateToUpdateSchedule, handleRemove, proceedings } =
+		useHomeItem(data)
 	const mapTranslateIcon: Record<
 		"cabelo" | "unha" | "cilios",
 		keyof typeof mapTypeProceedingsIcon
@@ -36,39 +36,6 @@ export default function HomeItem({ data }: HomeItemProps) {
 		cabelo: "hair",
 		unha: "nail",
 		cilios: "eyeslash",
-	}
-	useEffect(() => {
-		function getProceedingsName() {
-			let p = data?.proceedingsKeys
-
-			setProceedings([])
-			p?.forEach(async (item) => {
-				const proceedings = await proceedingsService.getSingleProceeding(
-					item,
-					data.type
-				)
-				if (!proceedings) return
-				let proceedingsName = Object.values(proceedings).toString()
-				function toCapitalize(str: string) {
-					return str.charAt(0).toUpperCase() + str.slice(1)
-				}
-				setProceedings((oldP) => [...oldP, toCapitalize(proceedingsName)])
-			})
-		}
-		getProceedingsName()
-	}, [data])
-
-	function handleRemove() {
-		remove(ref(db, "agenda/" + data.id))
-	}
-	function handleNavigateToUpdateSchedule() {
-		const newDate = new Date(data.date)
-
-		const [day, month, year] = data.date.toString().split("/")
-
-		newDate.setFullYear(Number(year), Number(month) - 1, Number(day))
-
-		navigation.navigate("ScheduleClient", { data: { ...data, date: newDate } })
 	}
 	return (
 		<BoxPressable

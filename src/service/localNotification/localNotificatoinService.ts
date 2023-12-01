@@ -10,16 +10,16 @@ export async function localNotification({
 	body,
 	dateToDisplay,
 }: PocalNotificationProps) {
+	let date = new Date(dateToDisplay)
+	date.setHours(7, 0, 0)
+
 	await Notifications.scheduleNotificationAsync({
 		content: {
 			title,
 			body,
 		},
 		trigger: {
-			day: dateToDisplay.getDate(),
-			month: dateToDisplay.getMonth(),
-			year: dateToDisplay.getFullYear(),
-			hour: 7,
+			date,
 		},
 	})
 }

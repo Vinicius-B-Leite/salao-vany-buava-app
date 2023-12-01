@@ -8,6 +8,7 @@ import { Ionicons } from "@expo/vector-icons"
 import { Proceedings, ProceedingsTypes } from "../../models/Proceedings/types"
 import { proceedingsService } from "@/models/Proceedings/proceedingsService"
 import { Box, Container, Input, Spinner } from "@/components"
+import { useProcedingsModal } from "./useProcedingsModal"
 
 type ProcedingsModalProps = {
 	setProccedingsModalVisible: React.Dispatch<React.SetStateAction<boolean>>
@@ -24,62 +25,18 @@ export default function ProcedingsModal({
 	selectedProceedings,
 	setSelectedProceedings,
 }: ProcedingsModalProps) {
-	const [searchInput, setSearchInput] = useState("")
-	const searchInputRef = useRef<TextInput>(null)
-	const [proceedings, setProceedings] = useState<Proceedings[]>([])
-	const [loading, setLoading] = useState(true)
+	const {
+		filterProceedings,
+		handleDelete,
+		handleSelectProceeding,
+		loading,
+		searchInputRef,
+		getProceedings,
+		searchInput,
+		proceedings,
+		setSearchInput,
+	} = useProcedingsModal({ selectedProceedings, setSelectedProceedings, type })
 
-	async function getProceedings() {
-		setLoading(true)
-		const proceedingsResponse = await proceedingsService.getProceedings(type)
-		if (proceedingsResponse) {
-			setProceedings(proceedingsResponse)
-		}
-		setLoading(false)
-	}
-
-	useEffect(() => {
-		setSelectedProceedings([])
-	}, [type])
-
-	const filterProceedings = useMemo(() => {
-		let proceedingsFilter = proceedings.filter((item) => {
-			return item.name.includes(searchInput.toLowerCase())
-		})
-
-		return proceedingsFilter
-	}, [])
-
-	const handleSelectProceeding = (proceedingsKey: string) => {
-		const index = selectedProceedings.indexOf(proceedingsKey)
-		const wasAlreadySelected = index > -1
-
-		if (wasAlreadySelected) {
-			const newSelectedProceedings = selectedProceedings
-			newSelectedProceedings.splice(index, 1)
-			setSelectedProceedings([...newSelectedProceedings])
-			return
-		}
-
-		setSelectedProceedings([...selectedProceedings, proceedingsKey])
-	}
-	const handleDelete = (proceedingsItem: Proceedings) => {
-		const index = proceedings.findIndex((v) => v.id === proceedingsItem.id)
-		setProceedings((oldValue) => {
-			oldValue.splice(index, 1)
-			return [...oldValue]
-		})
-
-		if (selectedProceedings.includes(proceedingsItem.id)) {
-			const indexInSelectedProceedings = selectedProceedings.indexOf(
-				proceedingsItem.id
-			)
-			setSelectedProceedings((oldValue) => {
-				oldValue.slice(indexInSelectedProceedings, 1)
-				return [...oldValue]
-			})
-		}
-	}
 	return (
 		<Modal
 			animationType="slide"
@@ -126,7 +83,7 @@ export default function ProcedingsModal({
 						</Box>
 					</Box>
 
-					<Box mt="s30">
+					<Box mt="s30" mb="s66">
 						<FlatList
 							data={searchInput ? filterProceedings : proceedings}
 							keyExtractor={(item) => item.id.toString()}

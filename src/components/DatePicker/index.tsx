@@ -5,12 +5,7 @@ import DateTimePicker, {
 import { HourPickerProps } from "../HourPicker"
 
 type DatePickerProps = HourPickerProps
-export default function DatePicker({
-	value,
-	onChangeValue,
-	setShow,
-	visible,
-}: DatePickerProps) {
+export function DatePicker({ value, onChangeValue, setShow, visible }: DatePickerProps) {
 	function onChange(event: DateTimePickerEvent, selectedDate?: Date) {
 		if (!selectedDate) return
 
