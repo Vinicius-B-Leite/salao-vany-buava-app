@@ -16,7 +16,10 @@ export async function localNotification({
 			body,
 		},
 		trigger: {
-			date: dateToDisplay,
+			day: dateToDisplay.getDate(),
+			month: dateToDisplay.getMonth(),
+			year: dateToDisplay.getFullYear(),
+			hour: 7,
 		},
 	})
 }

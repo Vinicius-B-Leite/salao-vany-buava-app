@@ -11,6 +11,7 @@ import {
 	Box,
 	Container,
 	InputDropdown,
+	Text,
 } from "@/components"
 import { Controller, useForm } from "react-hook-form"
 import { ScheduleForm, scheduleSchema } from "./scheduleSchema"
@@ -22,20 +23,31 @@ import { AppRouteParamsList } from "@/routes/app.route"
 type ScreenProps = DrawerScreenProps<AppRouteParamsList, "ScheduleClient">
 export default function Schedule({ route, navigation }: ScreenProps) {
 	const routeParams = route?.params?.data
-	console.log(routeParams?.date)
 
-	const { control, formState, handleSubmit, getValues } = useForm<ScheduleForm>({
-		resolver: zodResolver(scheduleSchema),
-		defaultValues: {
-			clientName: routeParams?.clientName || "",
-			date: routeParams?.date ? new Date(routeParams?.date) : new Date(),
-			hour: routeParams?.hour ? new Date(routeParams?.hour) : new Date(),
-			proceedgins: routeParams?.proceedingsKeys || [],
-			totalValue: routeParams?.totalValue.toString() || "",
-			type: routeParams?.type || "cabelo",
-		},
-		mode: "onChange",
-	})
+	const { control, formState, handleSubmit, watch, getFieldState, reset } =
+		useForm<ScheduleForm>({
+			resolver: zodResolver(scheduleSchema),
+			defaultValues: {
+				clientName: "",
+				date: new Date(),
+				hour: new Date(),
+				proceedgins: [],
+				totalValue: "",
+				type: "cabelo",
+			},
+			values: routeParams
+				? {
+						clientName: routeParams?.clientName,
+						date: routeParams?.date,
+						hour: routeParams?.hour,
+						proceedgins: routeParams?.proceedingsKeys,
+						totalValue: routeParams?.totalValue.toString(),
+						type: routeParams?.type,
+				  }
+				: undefined,
+
+			mode: "onChange",
+		})
 
 	const [proceddingsModalVisible, setProccedingsModalVisible] = useState(false)
 	const [loading, setLoading] = useState(false)
@@ -45,18 +57,37 @@ export default function Schedule({ route, navigation }: ScreenProps) {
 
 		try {
 			const { clientName, date, hour, proceedgins, totalValue, type } = data
+			const isUpdatading = !!routeParams
 
-			await scheduleService.createSchedule(
-				{
-					clientName,
-					date,
-					hour,
-					proceedingsKeys: proceedgins,
-					totalValue: Number(totalValue),
-					type: type,
-				},
-				routeParams?.id
-			)
+			await scheduleService[isUpdatading ? "updateSchedule" : "createSchedule"]({
+				clientName,
+				date,
+				hour,
+				proceedingsKeys: proceedgins,
+				totalValue: Number(totalValue),
+				type: type,
+				id: routeParams?.id || "",
+			})
+			reset({
+				clientName: "",
+				date: new Date(),
+				hour: new Date(),
+				proceedgins: [],
+				totalValue: "",
+				type: "cabelo",
+			})
+			navigation.reset({
+				index: 1,
+				routes: [
+					{
+						name: "ScheduleClient",
+						state: undefined,
+					},
+					{
+						name: "ScheduleToday",
+					},
+				],
+			})
 		} catch (error) {
 			console.log(`submit - Schedule (Screen) - line 70 ${error}`)
 		} finally {
@@ -104,6 +135,7 @@ export default function Schedule({ route, navigation }: ScreenProps) {
 				title="Procedimentos"
 				onPress={() => setProccedingsModalVisible(true)}
 			/>
+			<Text color="alert">{getFieldState("proceedgins").error?.message}</Text>
 
 			<Controller
 				control={control}
@@ -112,7 +144,7 @@ export default function Schedule({ route, navigation }: ScreenProps) {
 					<ProcedingsModal
 						setProccedingsModalVisible={setProccedingsModalVisible}
 						proceddingsModalVisible={proceddingsModalVisible}
-						type={getValues().type}
+						type={watch().type}
 						selectedProceedings={field.value}
 						setSelectedProceedings={field.onChange}
 					/>

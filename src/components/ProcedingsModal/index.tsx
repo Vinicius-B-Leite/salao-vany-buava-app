@@ -67,10 +67,9 @@ export default function ProcedingsModal({
 		const wasAlreadySelected = index > -1
 
 		if (wasAlreadySelected) {
-			setSelectedProceedings((oldValue) => {
-				oldValue.splice(index, 1)
-				return [...oldValue]
-			})
+			const newSelectedProceedings = selectedProceedings
+			newSelectedProceedings.splice(index, 1)
+			setSelectedProceedings([...newSelectedProceedings])
 			return
 		}
 

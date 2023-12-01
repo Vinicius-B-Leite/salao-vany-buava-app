@@ -30,7 +30,10 @@ export default function AppRoute() {
 		<NavigationContainer>
 			<Drawer.Navigator
 				drawerContent={(props) => <CustomDrawer {...props} />}
-				screenOptions={drawerStyle}>
+				screenOptions={{
+					...drawerStyle,
+					unmountOnBlur: true,
+				}}>
 				<Drawer.Screen
 					name="ScheduleToday"
 					component={AppHomeStack}

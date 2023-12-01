@@ -47,12 +47,16 @@ export const scheduleService: ScheduleService = {
 			setLoading(false)
 		})
 	},
-	createSchedule: async (
-		{ clientName, date, hour, totalValue, proceedingsKeys, type },
-		key
-	) => {
+	createSchedule: async ({
+		clientName,
+		date,
+		hour,
+		totalValue,
+		proceedingsKeys,
+		type,
+	}) => {
 		try {
-			let newKey = key ? ref(db, `agenda/${key}`) : push(dbRef)
+			let newKey = push(dbRef)
 
 			await set(newKey, {
 				cliente: clientName,
@@ -65,7 +69,6 @@ export const scheduleService: ScheduleService = {
 			})
 
 			let dateToDisplayNotification = new Date(date)
-			dateToDisplayNotification.setHours(7)
 
 			await localNotification({
 				title: `Vany, hoje você tem cliente!!`,
@@ -91,7 +94,7 @@ export const scheduleService: ScheduleService = {
 		await update(ref(db, `agenda/${id}`), {
 			cliente: clientName,
 			data: format(date, "dd/MM/yyyy"),
-			hora: hour,
+			hora: hour.toString(),
 			id: id,
 			procedimento: proceedingsKeys,
 			tipo: type,

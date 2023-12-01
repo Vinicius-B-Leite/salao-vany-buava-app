@@ -66,9 +66,7 @@ export default function HomeItem({ data }: HomeItemProps) {
 
 		const [day, month, year] = data.date.toString().split("/")
 
-		newDate.setMonth(Number(month))
-		newDate.setFullYear(Number(year))
-		newDate.setDate(Number(day))
+		newDate.setFullYear(Number(year), Number(month) - 1, Number(day))
 
 		navigation.navigate("ScheduleClient", { data: { ...data, date: newDate } })
 	}
