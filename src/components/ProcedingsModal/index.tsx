@@ -1,25 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 
-import {
-	ActivityIndicator,
-	FlatList,
-	Modal,
-	TextInput,
-	TouchableOpacity,
-	TouchableWithoutFeedback,
-	View,
-} from "react-native"
-import * as S from "./styles"
+import { FlatList, Modal, TextInput, TouchableOpacity } from "react-native"
 import Item from "./Item"
 
 import { Ionicons } from "@expo/vector-icons"
 
-import { child, get, ref } from "firebase/database"
-import { db } from "../../service/firebase"
-import { useFocusEffect } from "@react-navigation/native"
 import { Proceedings, ProceedingsTypes } from "../../models/Proceedings/types"
 import { proceedingsService } from "@/models/Proceedings/proceedingsService"
-import { Box, Input, Spinner } from "@/components"
+import { Box, Container, Input, Spinner } from "@/components"
 
 type ProcedingsModalProps = {
 	setProccedingsModalVisible: React.Dispatch<React.SetStateAction<boolean>>
@@ -103,7 +91,7 @@ export default function ProcedingsModal({
 					<Spinner />
 				</Box>
 			) : (
-				<S.Container>
+				<Container>
 					<Box
 						flexDirection="row"
 						alignItems="center"
@@ -155,7 +143,7 @@ export default function ProcedingsModal({
 							)}
 						/>
 					</Box>
-				</S.Container>
+				</Container>
 			)}
 		</Modal>
 	)

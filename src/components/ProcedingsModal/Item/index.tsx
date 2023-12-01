@@ -1,14 +1,11 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 
-import * as S from "./styles"
 import { AntDesign } from "@expo/vector-icons"
 
-import { ref, remove } from "firebase/database"
-import { db } from "../../../service/firebase"
 import { Alert } from "react-native"
 import { Proceedings, ProceedingsTypes } from "../../../models/Proceedings/types"
 import { useTheme } from "@shopify/restyle"
-import { BoxPressable } from "@/components"
+import { BoxPressable, Text } from "@/components"
 import { proceedingsService } from "@/models/Proceedings/proceedingsService"
 
 type ItemProps = {
@@ -54,7 +51,7 @@ export default function Item({
 			mb="s16"
 			onPress={() => handleSelectProceeding(proceeding)}
 			onLongPress={() => deleteItem()}>
-			<S.Proceeding>{proceeding.name}</S.Proceeding>
+			<Text variant="pRegular">{proceeding.name}</Text>
 			<AntDesign
 				name="checkcircle"
 				size={24}
