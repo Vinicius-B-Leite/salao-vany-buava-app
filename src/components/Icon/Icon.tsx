@@ -3,8 +3,8 @@ import Eyeslash from "@/assets/EyeslashIcon"
 import HairIcon from "@/assets/HairIcon"
 import NailIcon from "@/assets/NailIcon"
 import Triangle from "@/assets/Triangle"
+import { useAppTheme } from "@/hooks"
 import { Theme } from "@/theme"
-import { useTheme } from "@shopify/restyle"
 import React from "react"
 
 type IconProps = {
@@ -14,7 +14,7 @@ type IconProps = {
 }
 
 export const Icon: React.FC<IconProps> = ({ color, name, size = 20 }) => {
-	const theme = useTheme()
+	const theme = useAppTheme()
 	const SVGIcon = mapIcons[name]
 	return <SVGIcon color={theme.colors[color || "text"]} size={size} />
 }

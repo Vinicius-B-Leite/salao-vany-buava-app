@@ -1,12 +1,13 @@
 import React from "react"
 
 import { Entypo } from "@expo/vector-icons"
-import { useTheme } from "@shopify/restyle"
+
 import { Text, Box, BoxPressable } from "@/components"
 import { DrawerActions, useNavigation } from "@react-navigation/native"
+import { useAppTheme } from "@/hooks"
 
 const Header: React.FC = () => {
-	const theme = useTheme()
+	const theme = useAppTheme()
 	const navigation = useNavigation()
 	return (
 		<Box m="s12" flexDirection="row" alignItems="center" gap="s12">

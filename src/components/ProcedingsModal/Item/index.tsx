@@ -4,9 +4,9 @@ import { AntDesign } from "@expo/vector-icons"
 
 import { Alert } from "react-native"
 
-import { useTheme } from "@shopify/restyle"
 import { BoxPressable, Text } from "@/components"
 import { proceedingsService, Proceedings, ProceedingsTypes } from "@/models"
+import { useAppTheme } from "@/hooks"
 
 type ItemProps = {
 	proceeding: Proceedings
@@ -22,7 +22,7 @@ export default function Item({
 	isSelected,
 	handleDelete,
 }: ItemProps) {
-	const { colors } = useTheme()
+	const { colors } = useAppTheme()
 	function deleteItem() {
 		Alert.alert("Atenção", "Deseja excluir o procedimento " + proceeding.name + "?", [
 			{

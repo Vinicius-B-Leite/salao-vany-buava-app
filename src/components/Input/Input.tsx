@@ -1,9 +1,8 @@
 import React, { forwardRef, useRef, useState } from "react"
 import { TextInput, TextInputProps } from "react-native"
 import { BoxPressable, Box, Text, BoxType } from "@/components"
-import { useTheme } from "@shopify/restyle"
-import { Theme } from "@/theme"
 import { wrapper } from "./style"
+import { useAppTheme } from "@/hooks"
 
 export type InputProps = TextInputProps & {
 	label?: string
@@ -15,7 +14,7 @@ export type InputProps = TextInputProps & {
 
 export const Input = forwardRef<TextInput, InputProps>(
 	({ label, leftIcon, rigthIcon, errorMessage, boxProps, ...rest }, ref) => {
-		const { colors, textVariants } = useTheme<Theme>()
+		const { colors, textVariants } = useAppTheme()
 		const inputRef = useRef<TextInput>(null)
 		const [isFocus, setIsFocus] = useState(false)
 

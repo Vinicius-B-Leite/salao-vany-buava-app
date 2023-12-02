@@ -1,15 +1,16 @@
 import React from "react"
 import { AntDesign } from "@expo/vector-icons"
-import { useTheme } from "@shopify/restyle"
+
 import { Text, Box, BoxPressable } from "@/components"
 import { months, daysOfWeek } from "@/utlis"
+import { useAppTheme } from "@/hooks"
 
 type DateSelectedProps = {
 	date: Date
 	openCalendar: () => void
 }
 const DateSelected: React.FC<DateSelectedProps> = ({ date, openCalendar }) => {
-	const theme = useTheme()
+	const theme = useAppTheme()
 	const dateFormated = `${daysOfWeek[date.getDay()]}, ${date.getDate()} de ${
 		months[date.getMonth()]
 	} de ${date.getFullYear()}`
