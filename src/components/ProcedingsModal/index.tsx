@@ -48,7 +48,7 @@ export function ProcedingsModal({
 					<Spinner />
 				</Box>
 			) : (
-				<Container>
+				<Container pt="s12">
 					<Box
 						flexDirection="row"
 						alignItems="center"
@@ -61,6 +61,7 @@ export function ProcedingsModal({
 						<Box
 							bg="contrastSecond"
 							flex={0.9}
+							overflow="hidden"
 							flexDirection="row-reverse"
 							alignItems="center"
 							borderRadius="s5"
@@ -87,6 +88,7 @@ export function ProcedingsModal({
 						<FlatList
 							data={searchInput ? filterProceedings : proceedings}
 							keyExtractor={(item) => item.id.toString()}
+							showsVerticalScrollIndicator={false}
 							renderItem={({ item }) => (
 								<Item
 									proceeding={item}

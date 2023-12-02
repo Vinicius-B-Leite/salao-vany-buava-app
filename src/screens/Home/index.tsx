@@ -4,7 +4,7 @@ import HomeItem from "./components/Item"
 import Header from "./components/Header"
 import DateSelected from "./components/DateSelected"
 
-import { Spinner, Container, Text, DatePicker } from "@/components"
+import { Spinner, Container, Text, DatePicker, Box } from "@/components"
 import { useHome } from "./hooks/useHome"
 
 export function Home() {
@@ -14,7 +14,7 @@ export function Home() {
 	return (
 		<>
 			<Header />
-			<Container>
+			<Container mb="s66">
 				<Text variant="tMax" mb="s16">
 					Olá, Vanny!
 				</Text>
@@ -26,6 +26,7 @@ export function Home() {
 					<FlatList
 						data={data}
 						keyExtractor={(item) => item.id}
+						showsVerticalScrollIndicator={false}
 						renderItem={({ item }) => <HomeItem data={item} />}
 						ListEmptyComponent={() => (
 							<Text variant="pRegular" color="alert">
