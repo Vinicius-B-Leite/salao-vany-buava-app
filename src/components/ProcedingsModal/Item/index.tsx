@@ -3,10 +3,10 @@ import React from "react"
 import { AntDesign } from "@expo/vector-icons"
 
 import { Alert } from "react-native"
-import { Proceedings, ProceedingsTypes } from "../../../models/Proceedings/types"
+
 import { useTheme } from "@shopify/restyle"
 import { BoxPressable, Text } from "@/components"
-import { proceedingsService } from "@/models/Proceedings/proceedingsService"
+import { proceedingsService, Proceedings, ProceedingsTypes } from "@/models"
 
 type ItemProps = {
 	proceeding: Proceedings

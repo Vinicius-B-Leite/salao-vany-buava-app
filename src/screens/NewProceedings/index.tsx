@@ -1,15 +1,12 @@
-import React, { useState } from "react"
+import React from "react"
 
-import TypePicker from "../../components/TypePicker"
-
-import { proceedingsService } from "../../models/Proceedings/proceedingsService"
-import { Button, Container, FormInput, Input } from "@/components"
+import { Button, Container, FormInput, TypePicker } from "@/components"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { NewProceedingsForm, newProceedingsSchema } from "./newProceedingsSchema"
 import { useNewProceedings } from "./useNewProceedings"
 
-export default function NewProceedings() {
+export function NewProceedings() {
 	const { control, formState, handleSubmit, reset } = useForm<NewProceedingsForm>({
 		resolver: zodResolver(newProceedingsSchema),
 		defaultValues: {

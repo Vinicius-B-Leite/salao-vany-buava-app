@@ -1,6 +1,6 @@
 import { child, get, push, ref, remove, set } from "firebase/database"
 import { Proceedings, ProceedingsResponse, proceedingsServiceType } from "./types"
-import { db } from "../../service/firebase"
+import { db } from "@/service"
 
 export const proceedingsService: proceedingsServiceType = {
 	createProceedings: async (proceedingsName, type) => {

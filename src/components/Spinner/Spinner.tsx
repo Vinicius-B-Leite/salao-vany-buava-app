@@ -1,8 +1,7 @@
 import { Theme } from "@/theme"
 import { useTheme } from "@shopify/restyle"
 import React from "react"
-import { ActivityIndicatorProps } from "react-native"
-import { ActivityIndicator, View } from "react-native"
+import { ActivityIndicator, ActivityIndicatorProps } from "react-native"
 
 type SpinnerProps = ActivityIndicatorProps & {
 	color?: keyof Theme["colors"]

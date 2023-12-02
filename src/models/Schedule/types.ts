@@ -1,5 +1,5 @@
 import { Unsubscribe } from "firebase/database"
-import { ProceedingsTypes } from "../Proceedings/types"
+import { ProceedingsTypes } from "@/models"
 
 export type Schedule = {
 	clientName: string

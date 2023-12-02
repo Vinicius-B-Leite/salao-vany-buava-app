@@ -6,9 +6,6 @@ import Triangle from "@/assets/Triangle"
 import { Theme } from "@/theme"
 import { useTheme } from "@shopify/restyle"
 import React from "react"
-import { AntDesign } from "@expo/vector-icons"
-import EyeIcon from "@/assets/EyeIcon"
-import EyeHide from "@/assets/EyeHideIcon"
 
 type IconProps = {
 	name: keyof typeof mapIcons

@@ -1,14 +1,9 @@
-import React, { useEffect, useState } from "react"
-import { NavigationProp, useNavigation } from "@react-navigation/native"
+import React from "react"
 
 import { Dimensions, FlatList } from "react-native"
 
-import { ref, remove } from "firebase/database"
-import { db } from "../../../service/firebase"
+import { Schedule } from "@/models"
 
-import { Schedule } from "../../../models/Schedule/types"
-
-import { proceedingsService } from "../../../models/Proceedings/proceedingsService"
 import {
 	Box,
 	BoxPressable,

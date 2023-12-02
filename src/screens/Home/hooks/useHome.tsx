@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
-import { scheduleService } from "@/models/Schedule/scheduleService"
-import { Schedule } from "@/models/Schedule/types"
+
+import { Schedule, scheduleService } from "@/models"
 
 export function useHome() {
 	const [data, setData] = useState<Schedule[]>([])

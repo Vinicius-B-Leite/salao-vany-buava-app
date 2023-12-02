@@ -1,8 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import React from "react"
-import { View } from "react-native"
-import Home from "../screens/Home"
-import { Schedule } from "../models/Schedule/types"
+import { Home } from "@/screens"
+import { Schedule } from "@/models"
 
 export type AppHomeStackParamslist = {
 	Home: undefined

@@ -10,9 +10,8 @@ import {
 	update,
 } from "firebase/database"
 import { Schedule, ScheduleService } from "./types"
-import { db, dbRef } from "../../service/firebase"
+import { db, dbRef, localNotification } from "@/service"
 import { format } from "date-fns"
-import { localNotification } from "../../service/localNotification/localNotificatoinService"
 
 export const scheduleService: ScheduleService = {
 	getScheduleRealtTime: (date: Date, setShedule, setLoading) => {

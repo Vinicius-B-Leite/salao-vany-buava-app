@@ -1,6 +1,5 @@
 import { UserService } from "./types"
-import { USER_KEY } from "@/storage/storageConfig"
-import { storage } from "@/storage/storage"
+import { USER_KEY, storage } from "@/storage"
 
 export const userService: UserService = {
 	getStorageUser: async () => {

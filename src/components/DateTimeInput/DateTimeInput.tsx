@@ -1,13 +1,9 @@
 import React, { useState } from "react"
-import { TouchableOpacity, View } from "react-native"
-import { Box, BoxPressable } from "../Box/Box"
 
 import { Entypo, Feather } from "@expo/vector-icons"
-import { Input } from "../Input/Input"
 import { format } from "date-fns"
 import { Controller, FieldValues, UseControllerProps } from "react-hook-form"
-import { DatePicker } from "@/components"
-import HourPicker from "../HourPicker"
+import { DatePicker, HourPicker, Input, BoxPressable } from "@/components"
 
 type DateTimeInputProps = {
 	type: "date" | "time"

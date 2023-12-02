@@ -1,8 +1,7 @@
 import React from "react"
-import { View } from "react-native"
-import { Input, InputProps } from "../Input/Input"
+
+import { PasswordInput, InputProps } from "@/components"
 import { Controller, FieldValues, UseControllerProps } from "react-hook-form"
-import { PasswordInput } from "../PasswordInput/PasswordInput"
 
 export function FormPasswordInput<T extends FieldValues>({
 	name,

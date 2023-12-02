@@ -2,7 +2,7 @@ import React from "react"
 import DateTimePicker, {
 	DateTimePickerEvent,
 } from "@react-native-community/datetimepicker"
-import { HourPickerProps } from "../HourPicker"
+import { HourPickerProps } from "@/components"
 
 type DatePickerProps = HourPickerProps
 export function DatePicker({ value, onChangeValue, setShow, visible }: DatePickerProps) {

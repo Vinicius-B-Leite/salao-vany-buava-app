@@ -1,14 +1,14 @@
 import React from "react"
 import { DimensionValue, View } from "react-native"
 import { Picker, PickerProps } from "@react-native-picker/picker"
-import { ProceedingsTypes } from "../../models/Proceedings/types"
+import { ProceedingsTypes } from "@/models"
 
 type TypePickerProps = PickerProps & {
 	selectedType: ProceedingsTypes
 	setSelectedType: (oldValue: ProceedingsTypes) => void
 	width?: DimensionValue
 }
-export default function TypePicker({
+export function TypePicker({
 	selectedType,
 	setSelectedType,
 	width,

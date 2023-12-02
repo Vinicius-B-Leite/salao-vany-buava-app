@@ -1,28 +1,25 @@
-import React, { useState } from "react"
+import React from "react"
 
-import TypePicker from "../../components/TypePicker"
-import ProcedingsModal from "../../components/ProcedingsModal"
-
-import { scheduleService } from "../../models/Schedule/scheduleService"
 import {
 	Button,
 	FormInput,
 	DateTimeInput,
-	Box,
 	Container,
 	InputDropdown,
 	Text,
+	ProcedingsModal,
+	TypePicker,
 } from "@/components"
 import { Controller, useForm } from "react-hook-form"
 import { ScheduleForm, scheduleSchema } from "./scheduleSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Row from "./components/Row"
 import { DrawerScreenProps } from "@react-navigation/drawer"
-import { AppRouteParamsList } from "@/routes/app.route"
+import { AppRouteParamsList } from "@/routes"
 import useSchedule from "./useSchedule"
 
 type ScreenProps = DrawerScreenProps<AppRouteParamsList, "ScheduleClient">
-export default function Schedule({ route, navigation }: ScreenProps) {
+export function Schedule({ route, navigation }: ScreenProps) {
 	const routeParams = route?.params?.data
 
 	const { control, formState, handleSubmit, watch, getFieldState, reset } =

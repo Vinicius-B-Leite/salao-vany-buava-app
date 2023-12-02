@@ -1,7 +1,6 @@
 import React from "react"
-import { View } from "react-native"
-import { Box, BoxPressable, BoxPressableProps, Text } from "@/components"
-import { Icon } from "../Icon/Icon"
+
+import { Box, BoxPressable, BoxPressableProps, Text, Icon } from "@/components"
 
 type InputDropdownProps = BoxPressableProps & {
 	title: string

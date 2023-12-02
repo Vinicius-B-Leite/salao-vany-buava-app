@@ -1,8 +1,7 @@
-import { Input, InputProps } from "@/components/Input/Input"
+import { Input, InputProps, BoxPressable } from "@/components"
 import React, { useState } from "react"
 import { Entypo } from "@expo/vector-icons"
 import { useTheme } from "@shopify/restyle"
-import { BoxPressable } from "../Box/Box"
 
 export const PasswordInput: React.FC<InputProps> = ({ ...rest }) => {
 	const [secureText, setSecureText] = useState(true)

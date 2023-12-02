@@ -1,6 +1,5 @@
 import React from "react"
-import { View } from "react-native"
-import { Input, InputProps } from "../Input/Input"
+import { Input, InputProps } from "@/components"
 import { Controller, FieldValues, UseControllerProps } from "react-hook-form"
 
 export function FormInput<T extends FieldValues>({

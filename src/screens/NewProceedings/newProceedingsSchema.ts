@@ -1,4 +1,4 @@
-import { ProceedingsTypes } from "@/models/Proceedings/types"
+import { ProceedingsTypes } from "@/models"
 import * as z from "zod"
 
 export const newProceedingsSchema = z.object({

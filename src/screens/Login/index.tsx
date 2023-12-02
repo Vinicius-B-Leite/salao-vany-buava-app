@@ -1,16 +1,15 @@
 import React, { useContext } from "react"
 
 import { Image } from "react-native"
-import { AuthContext } from "../../contexts/auth"
+import { AuthContext } from "@/contexts"
 import Logo from "@/assets/logo.png"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { LoginForm, loginSchema } from "./loginSchema"
-import { FormInput } from "@/components/Form/FormInput"
-import { FormPasswordInput } from "@/components/Form/FormPasswordInput"
-import { Spinner, Container, Button } from "@/components"
 
-export default function Login() {
+import { Spinner, Container, Button, FormInput, FormPasswordInput } from "@/components"
+
+export function Login() {
 	const { loadingLogin, login, errorLogin, loadingGetUser } = useContext(AuthContext)
 	const { control, formState, handleSubmit } = useForm<LoginForm>({
 		resolver: zodResolver(loginSchema),

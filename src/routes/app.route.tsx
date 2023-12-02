@@ -1,20 +1,14 @@
 import React from "react"
-import { SafeAreaView, View } from "react-native"
-import {
-	DrawerNavigationProp,
-	DrawerScreenProps,
-	createDrawerNavigator,
-} from "@react-navigation/drawer"
-import Home from "../screens/Home"
-import { NavigationContainer, NavigatorScreenParams } from "@react-navigation/native"
-import Schedule from "../screens/Schedule"
-import CustomDrawer from "../components/CustomDrawer"
-import NewProceedings from "../screens/NewProceedings"
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
-import { SafeAreaProvider } from "react-native-safe-area-context"
+import { createDrawerNavigator } from "@react-navigation/drawer"
+
+import { NavigationContainer, NavigatorScreenParams } from "@react-navigation/native"
+
+import { CustomDrawer } from "@/components"
+import { NewProceedings, Schedule } from "@/screens"
+
 import AppHomeStack, { AppHomeStackParamslist } from "./appHomeStack"
-import { Schedule as ScheduleType } from "@/models/Schedule/types"
+import { Schedule as ScheduleType } from "@/models"
 
 export type AppRouteParamsList = {
 	ScheduleToday: NavigatorScreenParams<AppHomeStackParamslist>

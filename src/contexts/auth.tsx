@@ -1,15 +1,10 @@
 import React, { createContext, useEffect, useState } from "react"
-import { signInWithEmailAndPassword, getAuth, AuthErrorCodes } from "firebase/auth"
-import { app, auth } from "../service/firebase"
+import { signInWithEmailAndPassword } from "firebase/auth"
+import { auth } from "@/service"
 
-import { User } from "../models/User/types"
-import {
-	emailErros,
-	firebaseAuthErrors,
-	passwordErrors,
-} from "@/utlis/firebaseAuthErrors"
+import { emailErros, firebaseAuthErrors, passwordErrors } from "@/utlis/"
 import { FirebaseError } from "firebase/app"
-import { userService } from "@/models/User/userService"
+import { userService, User } from "@/models"
 
 export type AuthContextProps = {
 	isLogged: boolean
@@ -23,7 +18,7 @@ export type AuthContextProps = {
 }
 export const AuthContext = createContext({} as AuthContextProps)
 
-export default function AuthContextProvider({ children }: { children: React.ReactNode }) {
+export function AuthContextProvider({ children }: { children: React.ReactNode }) {
 	const [user, setUser] = useState<User | null>(null)
 	const [errorLogin, setErrorLogin] = useState({ email: "", password: "" })
 	const [loadingLogin, setLoadingLogin] = useState(false)

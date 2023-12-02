@@ -1,6 +1,4 @@
-import { proceedingsService } from "@/models/Proceedings/proceedingsService"
-import { scheduleService } from "@/models/Schedule/scheduleService"
-import { Schedule } from "@/models/Schedule/types"
+import { Schedule, scheduleService, proceedingsService } from "@/models"
 import { useNavigation } from "@react-navigation/native"
 import { useEffect, useState } from "react"
 import { Alert } from "react-native"

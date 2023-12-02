@@ -1,8 +1,7 @@
 import { useState } from "react"
 import { ScheduleForm } from "./scheduleSchema"
-import { scheduleService } from "@/models/Schedule/scheduleService"
+import { scheduleService, Schedule } from "@/models"
 import { useNavigation } from "@react-navigation/native"
-import { Schedule } from "@/models/Schedule/types"
 
 type UseScheduleProps = {
 	routeParams?: Schedule

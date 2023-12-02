@@ -1,4 +1,4 @@
-import { AppRouteParamsList } from "../routes/app.route"
+import { AppRouteParamsList } from "@/routes"
 
 declare global {
 	namespace ReactNavigation {

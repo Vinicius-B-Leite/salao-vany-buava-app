@@ -1,16 +1,9 @@
-import {
-	DrawerContentScrollView,
-	DrawerItem,
-	DrawerItemList,
-} from "@react-navigation/drawer"
+import { DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer"
 import React from "react"
-import { Dimensions, Text, View } from "react-native"
-import Logo from "../../assets/logo.png"
+import { Text, View } from "react-native"
 import { DrawerContentComponentProps } from "@react-navigation/drawer/lib/typescript/src/types"
 
-const { height } = Dimensions.get("screen")
-
-export default function CustomDrawer(props: DrawerContentComponentProps) {
+export function CustomDrawer(props: DrawerContentComponentProps) {
 	return (
 		<DrawerContentScrollView {...props}>
 			<View style={{ marginTop: "10%", marginBottom: "10%" }}>

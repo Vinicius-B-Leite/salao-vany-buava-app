@@ -1,12 +1,12 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import React from "react"
 
-import { FlatList, Modal, TextInput, TouchableOpacity } from "react-native"
+import { FlatList, Modal, TouchableOpacity } from "react-native"
 import Item from "./Item"
 
 import { Ionicons } from "@expo/vector-icons"
 
-import { Proceedings, ProceedingsTypes } from "../../models/Proceedings/types"
-import { proceedingsService } from "@/models/Proceedings/proceedingsService"
+import { ProceedingsTypes } from "@/models/Proceedings/types"
+
 import { Box, Container, Input, Spinner } from "@/components"
 import { useProcedingsModal } from "./useProcedingsModal"
 
@@ -18,7 +18,7 @@ type ProcedingsModalProps = {
 	setSelectedProceedings: React.Dispatch<React.SetStateAction<string[]>>
 }
 
-export default function ProcedingsModal({
+export function ProcedingsModal({
 	setProccedingsModalVisible,
 	proceddingsModalVisible,
 	type,

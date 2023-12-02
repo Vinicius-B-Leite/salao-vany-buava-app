@@ -1,5 +1,5 @@
 import React, { forwardRef, useRef, useState } from "react"
-import { Pressable, TextInput, TextInputProps, View } from "react-native"
+import { TextInput, TextInputProps } from "react-native"
 import { BoxPressable, Box, Text, BoxType } from "@/components"
 import { useTheme } from "@shopify/restyle"
 import { Theme } from "@/theme"

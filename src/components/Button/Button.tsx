@@ -1,5 +1,4 @@
 import React from "react"
-import { PressableProps } from "react-native"
 import { Spinner, Text, BoxPressable, BoxPressableProps } from "@/components"
 
 type ButtonProps = BoxPressableProps & {

@@ -1,6 +1,6 @@
 import React from "react"
 import { ScrollView, View } from "react-native"
-import { Box, BoxType } from "../Box/Box"
+import { Box, BoxType } from "@/components"
 
 type ContainerProps = BoxType & {
 	scrollEnabled?: boolean

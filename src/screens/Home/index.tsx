@@ -1,14 +1,13 @@
 import { FlatList } from "react-native"
 
 import HomeItem from "./components/Item"
-
 import Header from "./components/Header"
 import DateSelected from "./components/DateSelected"
 
 import { Spinner, Container, Text, DatePicker } from "@/components"
 import { useHome } from "./hooks/useHome"
 
-export default function Home() {
+export function Home() {
 	const { data, loading, onChangeDate, showDatePicker, toggleDatePicker, date } =
 		useHome()
 

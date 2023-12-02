@@ -2,8 +2,7 @@ import React from "react"
 import { AntDesign } from "@expo/vector-icons"
 import { useTheme } from "@shopify/restyle"
 import { Text, Box, BoxPressable } from "@/components"
-import { daysOfWeek } from "@/utlis/daysOfWeek"
-import { months } from "@/utlis/months"
+import { months, daysOfWeek } from "@/utlis"
 
 type DateSelectedProps = {
 	date: Date
