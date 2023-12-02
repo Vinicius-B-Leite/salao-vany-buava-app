@@ -1,25 +1,28 @@
 {
-  "expo": {
-    "name": "Salao Vany Buava",
-    "slug": "SalaoVanyBuava",
-    "version": "1.0.0",
-    "icon": "./assets/icon.png",
-    "android": {
-      "package": "com.viniciusbl21.SalaoVanyBuava",
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#221F1F"
-      }
-    },
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#221F1F"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "23c4dfd7-8cf8-43ab-a5d0-282e6ffc860b"
-      }
-    }
-  }
+	"expo": {
+		"name": "Salao Vany Buava",
+		"slug": "SalaoVanyBuava",
+		"version": "1.0.0",
+		"icon": "./assets/icon.png",
+		"experiments": {
+			"tsconfigPaths": true
+		},
+		"android": {
+			"package": "com.viniciusbl21.SalaoVanyBuava",
+			"adaptiveIcon": {
+				"foregroundImage": "./assets/adaptive-icon.png",
+				"backgroundColor": "#221F1F"
+			}
+		},
+		"splash": {
+			"image": "./assets/splash.png",
+			"resizeMode": "contain",
+			"backgroundColor": "#221F1F"
+		},
+		"extra": {
+			"eas": {
+				"projectId": "23c4dfd7-8cf8-43ab-a5d0-282e6ffc860b"
+			}
+		}
+	}
 }
