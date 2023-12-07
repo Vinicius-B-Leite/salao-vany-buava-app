@@ -2,10 +2,7 @@ import * as z from "zod"
 import { Proceedings, ProceedingsTypes } from "@/models/Proceedings/types"
 
 export const scheduleSchema = z.object({
-	clientName: z
-		.string()
-		.min(2, "Mínimo de duas letras")
-		.regex(/^[a-zA-Z]+$/, "Apenas letras"),
+	clientName: z.string().min(2, "Mínimo de duas letras"),
 	type: z.custom<ProceedingsTypes>(),
 	totalValue: z.string().min(1, "Mínimo de 1 real"),
 	date: z.date(),
