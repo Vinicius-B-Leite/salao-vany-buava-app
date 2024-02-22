@@ -31,6 +31,20 @@ export function NewProceedings() {
 				name="type"
 				render={({ field: { onChange, value } }) => (
 					<TypePicker
+						options={[
+							{
+								label: "Cabelo",
+								value: "cabelo",
+							},
+							{
+								label: "Unha",
+								value: "unha",
+							},
+							{
+								label: "Cílios",
+								value: "cilios",
+							},
+						]}
 						selectedType={value}
 						setSelectedType={onChange}
 						width="100%"

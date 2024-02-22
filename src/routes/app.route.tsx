@@ -5,7 +5,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer"
 import { NavigationContainer, NavigatorScreenParams } from "@react-navigation/native"
 
 import { CustomDrawer } from "@/components"
-import { NewProceedings, Schedule } from "@/screens"
+import { CreateFin, NewProceedings, Schedule } from "@/screens"
 
 import AppHomeStack, { AppHomeStackParamslist } from "./appHomeStack"
 import { Schedule as ScheduleType } from "@/models"
@@ -16,6 +16,7 @@ export type AppRouteParamsList = {
 		data?: ScheduleType
 	}
 	NewProceedings: undefined
+	CreateFin: undefined
 }
 const Drawer = createDrawerNavigator<AppRouteParamsList>()
 
@@ -58,6 +59,14 @@ export default function AppRoute() {
 					options={{
 						drawerLabel: "Criar procedimento",
 						headerTitle: "Criar procedimento",
+					}}
+				/>
+				<Drawer.Screen
+					name="CreateFin"
+					component={CreateFin}
+					options={{
+						drawerLabel: "Criar Finanças",
+						headerTitle: "Criar Finanças",
 					}}
 				/>
 			</Drawer.Navigator>

@@ -76,7 +76,24 @@ export function Schedule({ route, navigation }: ScreenProps) {
 					control={control}
 					name="type"
 					render={({ field: { value, onChange } }) => (
-						<TypePicker selectedType={value} setSelectedType={onChange} />
+						<TypePicker
+							options={[
+								{
+									label: "Cabelo",
+									value: "cabelo",
+								},
+								{
+									label: "Unha",
+									value: "unha",
+								},
+								{
+									label: "Cílios",
+									value: "cilios",
+								},
+							]}
+							selectedType={value}
+							setSelectedType={onChange}
+						/>
 					)}
 				/>
 				<FormInput
