@@ -12,12 +12,14 @@ import { Controller, useForm } from "react-hook-form"
 import { CreateFinForm, creatFinSchema } from "./createFinSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useCreateFin } from "./useCreateFin"
+import { category, moneyFlux, paymentForm } from "@/models"
 
 export const CreateFin: React.FC = () => {
 	const {
 		control,
 		formState: { isValid },
 		handleSubmit,
+		reset,
 	} = useForm<CreateFinForm>({
 		resolver: zodResolver(creatFinSchema),
 		defaultValues: {
@@ -32,7 +34,7 @@ export const CreateFin: React.FC = () => {
 		mode: "onChange",
 	})
 
-	const { submit } = useCreateFin()
+	const { submit, loading } = useCreateFin(reset)
 
 	return (
 		<Container>
@@ -56,22 +58,13 @@ export const CreateFin: React.FC = () => {
 
 			<Controller
 				control={control}
-				name="paymentForm"
+				name="type"
 				render={({ field: { onChange, value } }) => (
 					<TypePicker
 						selectedType={value}
 						setSelectedType={onChange}
 						width={"100%"}
-						options={[
-							{
-								label: "Despesa",
-								value: "despesa",
-							},
-							{
-								label: "Receita",
-								value: "receita",
-							},
-						]}
+						options={moneyFlux}
 					/>
 				)}
 			/>
@@ -94,46 +87,20 @@ export const CreateFin: React.FC = () => {
 						selectedType={value}
 						setSelectedType={onChange}
 						width={"100%"}
-						options={[
-							{
-								label: "Crédito",
-								value: "credito",
-							},
-							{
-								label: "Débito",
-								value: "debito",
-							},
-							{
-								label: "Dinheiro",
-								value: "dinheiro",
-							},
-							{
-								label: "Pix",
-								value: "pix",
-							},
-						]}
+						options={paymentForm}
 					/>
 				)}
 			/>
 
 			<Controller
 				control={control}
-				name="paymentForm"
+				name="category"
 				render={({ field: { onChange, value } }) => (
 					<TypePicker
 						selectedType={value}
 						setSelectedType={onChange}
 						width={"100%"}
-						options={[
-							{
-								label: "Pessoal",
-								value: "pessoal",
-							},
-							{
-								label: "Salão",
-								value: "salao",
-							},
-						]}
+						options={category}
 					/>
 				)}
 			/>
@@ -141,7 +108,7 @@ export const CreateFin: React.FC = () => {
 			<Button
 				onPress={handleSubmit(submit)}
 				title="Salvar"
-				isLoading={false}
+				isLoading={loading}
 				disabled={!isValid}
 				width={"100%"}
 			/>

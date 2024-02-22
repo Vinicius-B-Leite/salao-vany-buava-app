@@ -1,3 +1,6 @@
+export * from "./Fin/finService"
+export * from "./Fin/constants"
+
 export * from "./Proceedings/proceedingsService"
 export * from "./Proceedings/types"
 
