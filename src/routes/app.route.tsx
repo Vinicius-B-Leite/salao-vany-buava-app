@@ -10,6 +10,8 @@ import { CreateFin, NewProceedings, Schedule } from "@/screens"
 import AppHomeStack, { AppHomeStackParamslist } from "./appHomeStack"
 import { Schedule as ScheduleType } from "@/models"
 
+import FinStackRoutes, { FinStackRoutes as FinStackRoutesType } from "./FinStackRoutes"
+
 export type AppRouteParamsList = {
 	ScheduleToday: NavigatorScreenParams<AppHomeStackParamslist>
 	ScheduleClient: {
@@ -17,6 +19,7 @@ export type AppRouteParamsList = {
 	}
 	NewProceedings: undefined
 	CreateFin: undefined
+	FinStackRoutes: NavigatorScreenParams<FinStackRoutesType>
 }
 const Drawer = createDrawerNavigator<AppRouteParamsList>()
 
@@ -24,6 +27,7 @@ export default function AppRoute() {
 	return (
 		<NavigationContainer>
 			<Drawer.Navigator
+				id="drawer"
 				drawerContent={(props) => <CustomDrawer {...props} />}
 				screenOptions={{
 					...drawerStyle,
@@ -69,12 +73,20 @@ export default function AppRoute() {
 						headerTitle: "Criar Finanças",
 					}}
 				/>
+				<Drawer.Screen
+					name="FinStackRoutes"
+					component={FinStackRoutes}
+					options={{
+						drawerLabel: "Consultar Finanças",
+						headerTitle: "Consultar Finanças",
+					}}
+				/>
 			</Drawer.Navigator>
 		</NavigationContainer>
 	)
 }
 
-const drawerStyle = {
+export const drawerStyle = {
 	headerStyle: {
 		backgroundColor: "#0C031E",
 	},

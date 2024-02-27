@@ -1,7 +1,6 @@
 import React from "react"
 import { DimensionValue, View } from "react-native"
 import { Picker, PickerProps } from "@react-native-picker/picker"
-import { ProceedingsTypes } from "@/models"
 
 type TypePickerProps<T> = PickerProps & {
 	selectedType: T
@@ -25,7 +24,11 @@ export function TypePicker<T extends number | string>({
 			onValueChange={(itemValue) => setSelectedType(itemValue as T)}
 			{...rest}>
 			{options.map((option) => (
-				<Picker.Item label={option.label} value={option.value} />
+				<Picker.Item
+					key={option.label}
+					label={option.label}
+					value={option.value}
+				/>
 			))}
 		</Picker>
 	)

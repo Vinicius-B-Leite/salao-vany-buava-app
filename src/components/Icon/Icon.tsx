@@ -1,6 +1,7 @@
 import CheckIcon from "@/assets/CheckIcon"
 import Eyeslash from "@/assets/EyeslashIcon"
 import HairIcon from "@/assets/HairIcon"
+import { LeftIcon } from "@/assets/LeftIcon"
 import NailIcon from "@/assets/NailIcon"
 import Triangle from "@/assets/Triangle"
 import { useAppTheme } from "@/hooks"
@@ -22,6 +23,7 @@ export const mapTypeProceedingsIcon = {
 	eyeslash: Eyeslash,
 	hair: HairIcon,
 	nail: NailIcon,
+	left: LeftIcon,
 }
 export const mapIcons = {
 	check: CheckIcon,

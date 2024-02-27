@@ -9,3 +9,5 @@ export * from "./Schedule/types"
 
 export * from "./User/userService"
 export * from "./User/types"
+
+export * from "./Fin/types"
